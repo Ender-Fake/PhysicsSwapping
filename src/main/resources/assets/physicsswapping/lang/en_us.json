@@ -1,0 +1,15 @@
+{
+  "text.physicsswapping.config_menu.title": "Main",
+  "text.physicsswapping.config_menu.enabled": "Toggle Mod",
+  "text.physicsswapping.config_menu.enabled.on": "Enabled",
+  "text.physicsswapping.config_menu.enabled.off": "Disabled",
+  "text.physicsswapping.config_menu.save": "Save",
+  "text.physicsswapping.config_menu.swap_values.title": "Parameters",
+  "text.physicsswapping.config_menu.swap_values.duration": "Duration",
+  "text.physicsswapping.config_menu.swap_values.bounce": "Bounces",
+  "text.physicsswapping.config_menu.swap_values.angle": "Angle",
+  "text.physicsswapping.config_menu.swap_values.y_offset": "Height",
+  "text.physicsswapping.config_menu.swap_values.item_scale": "Size",
+  "modmenu.summaryTranslation.physicsswapping": "Bouncy jump physics when moving items in your inventory.",
+  "modmenu.descriptionTranslation.physicsswapping": "Bouncy jump physics when moving items in your inventory."
+}

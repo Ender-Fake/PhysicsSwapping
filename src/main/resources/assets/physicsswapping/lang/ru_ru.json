@@ -1,0 +1,15 @@
+{
+  "text.physicsswapping.config_menu.title": "Основные",
+  "text.physicsswapping.config_menu.enabled": "Переключить мод",
+  "text.physicsswapping.config_menu.enabled.on": "Включён",
+  "text.physicsswapping.config_menu.enabled.off": "Выключен",
+  "text.physicsswapping.config_menu.save": "Сохранить",
+  "text.physicsswapping.config_menu.swap_values.title": "Параметры",
+  "text.physicsswapping.config_menu.swap_values.duration": "Длительность",
+  "text.physicsswapping.config_menu.swap_values.bounce": "Отскоков",
+  "text.physicsswapping.config_menu.swap_values.angle": "Угол",
+  "text.physicsswapping.config_menu.swap_values.y_offset": "Высота",
+  "text.physicsswapping.config_menu.swap_values.item_scale": "Размер",
+  "modmenu.summaryTranslation.physicsswapping": "Прыгучая физика при перемещении предметов в инвентаре.",
+  "modmenu.descriptionTranslation.physicsswapping": "Прыгучая физика при перемещении предметов в инвентаре."
+}

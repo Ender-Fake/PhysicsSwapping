@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "physicsswapping",
+  "version": "${version}",
+  "name": "Physics Swapping",
+  "description": "Bouncy jump physics when moving items in your inventory",
+  "authors": ["Ender_Fake"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/physicsswapping/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.enderium.physicsswapping.client.PhysicsSwappingClient"
+    ],
+    "main": [
+      "com.enderium.physicsswapping.PhysicsSwapping"
+    ],
+    "modmenu": [
+      "com.enderium.physicsswapping.client.config.ModMenuEntrypoint"
+    ]
+  },
+  "mixins": [
+    "physicsswapping.mixins.json",
+    {
+      "config": "physicsswapping.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

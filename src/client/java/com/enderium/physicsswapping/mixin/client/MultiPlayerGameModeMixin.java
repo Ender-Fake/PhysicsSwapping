@@ -1,0 +1,34 @@
+package com.enderium.physicsswapping.mixin.client;
+
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.multiplayer.MultiPlayerGameMode;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ServerGamePacketListener;
+import net.minecraft.network.protocol.game.ServerboundContainerClickPacket;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+
+import static com.enderium.physicsswapping.client.SwapUtils.processSlot;
+
+@Mixin(MultiPlayerGameMode.class)
+public class MultiPlayerGameModeMixin {
+
+    @WrapWithCondition(method = "handleContainerInput", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientPacketListener;send(Lnet/minecraft/network/protocol/Packet;)V"))
+    public boolean injectContainerAction(ClientPacketListener instance, Packet<ServerGamePacketListener> packet) {
+        ServerboundContainerClickPacket p = (ServerboundContainerClickPacket) packet;
+
+        processSlot(
+                p.containerId(),
+                p.stateId(),
+                p.slotNum(),
+                p.buttonNum(),
+                p.containerInput(),
+                p.changedSlots(),
+                p.carriedItem()
+        );
+
+        return true;
+    }
+
+}
