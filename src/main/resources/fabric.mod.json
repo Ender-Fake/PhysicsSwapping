@@ -5,7 +5,10 @@
   "name": "Physics Swapping",
   "description": "Bouncy jump physics when moving items in your inventory",
   "authors": ["Ender_Fake"],
-  "contact": {},
+  "contact": {
+    "sources": "https://github.com/Ender-Fake/PhysicsSwapping",
+    "issues": "https://github.com/Ender-Fake/PhysicsSwapping/issues"
+  },
   "license": "MIT",
   "icon": "assets/physicsswapping/icon.png",
   "environment": "client",
@@ -30,6 +33,6 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",
-    "minecraft": "${minecraft_version}"
+    "minecraft": ">=${minecraft_version}"
   }
 }
