@@ -22,7 +22,7 @@ public class AbstractContainerScreenMixin {
     }
 
     @Inject(method = "extractSlot", at = @At("RETURN"))
-    private void clear(GuiGraphicsExtractor graphics, Slot slot, int mouseX, int mouseY, CallbackInfo ci){
+    private void clear(GuiGraphicsExtractor graphics, Slot slot, int mouseX, int mouseY, CallbackInfo ci) {
         RenderContext.clearValues();
     }
 

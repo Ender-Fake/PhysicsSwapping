@@ -79,7 +79,7 @@ public class DualFloatRange implements AbstractRange, PropertyBuilder<DualFloatR
 
     @Override
     public void setMin(double min) {
-        this.min= (float) min;
+        this.min = (float) min;
     }
 
     @Override

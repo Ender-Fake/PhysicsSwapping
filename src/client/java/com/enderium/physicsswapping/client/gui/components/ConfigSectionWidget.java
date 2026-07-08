@@ -41,9 +41,8 @@ public class ConfigSectionWidget extends AbstractContainerWidget implements Cont
 
     protected final EventManager<ConfigSectionWidget, Boolean> onChanged = new EventManager<>(this);
 
-    private Rectangle leftTabHeader;
-    private Rectangle leftTabFooter;
-    private Rectangle leftTabContent;
+    private Rectangle tabHeader;
+    private Rectangle tabContent;
 
 
     public final DualFloatRange duration = new DualFloatRange(Values.duration);
@@ -70,9 +69,9 @@ public class ConfigSectionWidget extends AbstractContainerWidget implements Cont
     public void init() {
 
 
-        leftTabHeader = Rectangle.of(getX(), getY(), width, 40);
-        leftTabFooter = Rectangle.of(getX(), getBottom() - 40, width, 40);
-        leftTabContent = Rectangle.of(getX(), leftTabHeader.height(), width, height - leftTabHeader.height() - leftTabFooter.height());
+        tabHeader = Rectangle.of(getX(), getY(), width, 40);
+        Rectangle tabFooter = Rectangle.of(getX(), getBottom() - 40, width, 40);
+        tabContent = Rectangle.of(getX(), tabHeader.height(), width, height - tabHeader.height() - tabFooter.height());
 
         children.clear();
         contentHeight = 50;
@@ -81,9 +80,8 @@ public class ConfigSectionWidget extends AbstractContainerWidget implements Cont
 
         {
 
-            int wButton = leftTabFooter.width() / 3;
-            int wOffset = wButton - leftTabFooter.width() / 5;
-//            int wOffset = leftTabFooter.width()-wButton;//wButton>>1
+            int wButton = tabFooter.width() / 3;
+            int wOffset = wButton - tabFooter.width() / 5;
 
             children.add(Button.builder(ConfigText.SAVE.get(), button -> {
                 Values.SWAP_DATA.setFrom(data);
@@ -91,21 +89,21 @@ public class ConfigSectionWidget extends AbstractContainerWidget implements Cont
                 closeMenu.run();
 
 
-            }).bounds(leftTabFooter.x() + wOffset, leftTabFooter.centerY() - 10, wButton, 20).build());
+            }).bounds(tabFooter.x() + wOffset, tabFooter.centerY() - 10, wButton, 20).build());
             children.add(Button.builder(CommonComponents.GUI_CANCEL, button -> {
                 closeMenu.run();
-            }).bounds(leftTabFooter.right() - wOffset - wButton, leftTabFooter.centerY() - 10, wButton, 20).build());
+            }).bounds(tabFooter.right() - wOffset - wButton, tabFooter.centerY() - 10, wButton, 20).build());
         }
 
-        int w = (int) (leftTabContent.width() * 0.85f);
-        int x = (leftTabContent.width() >> 1) - (w >> 1);
+        int w = (int) (tabContent.width() * 0.85f);
+        int x = (tabContent.width() >> 1) - (w >> 1);
 
         DualSliderWidget[] widgets = new DualSliderWidget[]{
-                addEntry(createSlider(x, w, ConfigText.DURATION.get(), font, NumberRange.of(Limits.DURATION_LIMIT, 2),0.1)),
-                addEntry(createSlider(x, w, ConfigText.BOUNCE.get(), font, NumberRange.of(Limits.BOUNCE_LIMIT),1)),
-                addEntry(createSlider(x, w, ConfigText.Y_OFFSET.get(), font, NumberRange.of(Limits.Y_OFFSET_LIMIT, 2),0.1)),
-                addEntry(createSlider(x, w, ConfigText.ANGLE.get(), font, NumberRange.of(Limits.ANGLE_LIMIT, 2),0.1)),
-                addEntry(createSlider(x, w, ConfigText.ITEM_SCALE.get(), font, NumberRange.of(Limits.ITEM_SCALE_LIMIT, 2),0.01))
+                addEntry(createSlider(x, w, ConfigText.DURATION.get(), font, NumberRange.of(Limits.DURATION_LIMIT, 2), 0.1)),
+                addEntry(createSlider(x, w, ConfigText.BOUNCE.get(), font, NumberRange.of(Limits.BOUNCE_LIMIT), 1)),
+                addEntry(createSlider(x, w, ConfigText.Y_OFFSET.get(), font, NumberRange.of(Limits.Y_OFFSET_LIMIT, 2), 0.1)),
+                addEntry(createSlider(x, w, ConfigText.ANGLE.get(), font, NumberRange.of(Limits.ANGLE_LIMIT, 2), 0.1)),
+                addEntry(createSlider(x, w, ConfigText.ITEM_SCALE.get(), font, NumberRange.of(Limits.ITEM_SCALE_LIMIT, 2), 0.01))
         };
 
 
@@ -115,11 +113,11 @@ public class ConfigSectionWidget extends AbstractContainerWidget implements Cont
         initSlider(widgets[3], angle, Values.angle, Defaults.ANGLE_VALUE);
         initSlider(widgets[4], itemScale, Values.itemScale, Defaults.ITEM_SCALE_VALUE);
 
-        int offset = leftTabContent.height() / 5;
-        int y = leftTabContent.centerY()-(offset<<1)-20;
+        int offset = tabContent.height() / 5;
+        int y = tabContent.centerY() - (offset << 1) - 20;
         for (DualSliderWidget widget : widgets) {
             widget.setY(y);
-            y+=offset;
+            y += offset;
         }
 
 
@@ -151,17 +149,15 @@ public class ConfigSectionWidget extends AbstractContainerWidget implements Cont
 
     @Override
     protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
-
         //graphics.outline(getX(),getY(),width,height-1,-1);
-        //graphics.fill(getX(),getY()+2,getRight(),getBottom(), 0x73000000);
-        graphics.fill(leftTabContent.x(), leftTabContent.y(), leftTabContent.right(), leftTabContent.bottom(), 0x73000000);
+        graphics.fill(tabContent.x(), tabContent.y(), tabContent.right(), tabContent.bottom(), 0x73000000);
 
         drawTabsShades(graphics);
 
         graphics.verticalLine(getRight(), getY() - 1, getBottom(), 0xA3888888);
 
         Font font = minecraft.font;
-        graphics.centeredText(font, message, leftTabHeader.centerX(), leftTabHeader.centerY() - (font.lineHeight >> 1), -1);
+        graphics.centeredText(font, message, tabHeader.centerX(), tabHeader.centerY() - (font.lineHeight >> 1), -1);
 
         children.forEach(configEntry -> configEntry.extractRenderState(graphics, mouseX, mouseY, a));
 
@@ -173,8 +169,8 @@ public class ConfigSectionWidget extends AbstractContainerWidget implements Cont
     }
 
     private void drawTabsShades(GuiGraphicsExtractor graphics) {
-        graphics.blit(RenderPipelines.GUI_TEXTURED, Screen.HEADER_SEPARATOR, leftTabContent.x(), leftTabContent.y(), 0.0F, 0.0F, leftTabContent.width(), 2, 32, 2);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, Screen.FOOTER_SEPARATOR, leftTabContent.x(), leftTabContent.bottom(), 0.0F, 0.0F, leftTabContent.width(), 2, 32, 2);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, Screen.HEADER_SEPARATOR, tabContent.x(), tabContent.y(), 0.0F, 0.0F, tabContent.width(), 2, 32, 2);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, Screen.FOOTER_SEPARATOR, tabContent.x(), tabContent.bottom(), 0.0F, 0.0F, tabContent.width(), 2, 32, 2);
     }
 
     @Override

@@ -98,7 +98,6 @@ public class SliderWidget extends AbstractWidget {
     @Override
     protected void updateWidgetNarration(NarrationElementOutput output) {
 
-        //System.out.println(output);
     }
 
     public void change() {

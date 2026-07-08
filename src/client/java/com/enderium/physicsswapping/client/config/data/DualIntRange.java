@@ -67,7 +67,7 @@ public class DualIntRange implements AbstractRange, PropertyBuilder<DualIntRange
 
     @Override
     public void setMin(double min) {
-        this.min= (int) Math.round(min);
+        this.min = (int) Math.round(min);
     }
 
     @Override

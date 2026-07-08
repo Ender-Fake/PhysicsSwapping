@@ -43,10 +43,10 @@ public class GuiRenderProcessor {
         float itemScale = animation.itemScale() - 1;
         final int bounce = animation.bounce();
 
-        boolean timeout=false;
+        boolean timeout = false;
         if (time > maxTime) {
             time = maxTime;
-            timeout=true;
+            timeout = true;
         }
 
         final float scaleTime = bounce / maxTime;
@@ -55,7 +55,7 @@ public class GuiRenderProcessor {
         float sinScale = (float) (Mth.floor(time - bounce)) * scaleFloor;
         float ping = Mth.sin(time * Mth.PI) * sinScale * sinScale;  // Ping pong
         float abs = Mth.abs(ping);
-        pose.scaleAround(1 + abs * itemScale, x, y).translate(0, -yOffset * abs).rotateAbout(Mth.DEG_TO_RAD * ping * rotScale, x, y+2);
+        pose.scaleAround(1 + abs * itemScale, x, y).translate(0, -yOffset * abs).rotateAbout(Mth.DEG_TO_RAD * ping * rotScale, x, y + 2);
 
         return timeout;
     }
@@ -63,12 +63,10 @@ public class GuiRenderProcessor {
 
     public static void clearSlots() {
         slotsProcess.clear();
-        //RENDER_ITEMS.invalidateAll();
     }
 
 
     public static void addSlot(int slot, SwapSource source) {
-//        System.out.println(RENDER_ITEMS.size()+" "+ slotsProcess.size());
         slotsProcess.put(slot, ItemAnimation.ofConfig(slot, System.nanoTime()));
     }
 
@@ -85,7 +83,6 @@ public class GuiRenderProcessor {
         ItemAnimation animation = slotsProcess.get(slot);
         if (animation != null) {
             RenderContext.set(animation);
-            //RENDER_ITEMS.put(stack, animation);
         }
     }
 

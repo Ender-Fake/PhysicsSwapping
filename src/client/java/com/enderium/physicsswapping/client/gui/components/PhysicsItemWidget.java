@@ -21,8 +21,9 @@ public class PhysicsItemWidget extends AbstractWidget {
     private ItemAnimation animation;
 
     public PhysicsItemWidget(AnimationData data) {
-        this(0,0,data);
+        this(0, 0, data);
     }
+
     public PhysicsItemWidget(int x, int y, AnimationData data) {
         super(x, y, 16, 16, CommonComponents.EMPTY);
         this.data = data;

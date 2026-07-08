@@ -13,8 +13,8 @@ public class ClientPacketListenerMixin {
 
 
     @Inject(method = "handleContainerSetSlot", at = @At("RETURN"))
-    public void onChangeSlots(ClientboundContainerSetSlotPacket packet, CallbackInfo ci){
-        SwapUtils.onChangeSlot(packet.getContainerId(),packet.getSlot(),packet.getItem());
+    public void onChangeSlots(ClientboundContainerSetSlotPacket packet, CallbackInfo ci) {
+        SwapUtils.onChangeSlot(packet.getContainerId(), packet.getSlot(), packet.getItem());
     }
 
 }

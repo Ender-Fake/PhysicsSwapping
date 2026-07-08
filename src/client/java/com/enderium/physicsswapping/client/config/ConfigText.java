@@ -31,9 +31,4 @@ public interface ConfigText {
     Translate Y_OFFSET = SWAP_VALUES.resolve("y_offset");
     Translate ITEM_SCALE = SWAP_VALUES.resolve("item_scale");
 
-    Translate MAX_TIME_TOOLTIP = DURATION.resolve("tooltip");
-    Translate BOUNCE_TOOLTIP = BOUNCE.resolve("tooltip");
-    Translate ANGLE_TOOLTIP = ANGLE.resolve("tooltip");
-    Translate Y_OFFSET_TOOLTIP = Y_OFFSET.resolve("tooltip");
-
 }
