@@ -21,6 +21,7 @@ public class GraphWidget extends AbstractWidget {
     private final AnimationData data;
     private final ViewType viewType;
     private final Vector2i[] points = new Vector2i[64];
+    private String max="1", mid="0.5";
 
     public GraphWidget(int x, int y, int width, int height, Font font, ViewType viewType, AnimationData data) {
         super(x, y, width, height, CommonComponents.EMPTY);
@@ -42,16 +43,7 @@ public class GraphWidget extends AbstractWidget {
         graphics.verticalLine(x + (width >> 1), y, getBottom(), 0x66E6E6E6);
         graphics.horizontalLine(x, getRight(), y + divHeight, 0x66E6E6E6);
 
-        float v1, v2;
 
-        String max, mid;
-
-        v1 = viewType == ViewType.MAX ? data.yOffset().max : data.yOffset().min;
-        v2 = v1 * 0.5f;
-
-        DecimalFormat format = Formats.getFormat(2);
-        max = format.format(v1);
-        mid = format.format(v2);
 
 
         graphics.horizontalLine(x, getRight(), y + divHeight, 0x66E6E6E6);
@@ -86,6 +78,15 @@ public class GraphWidget extends AbstractWidget {
         float itemScale = animation.itemScale() - 1;*/
         final int bounce = animation.bounce();
 
+        float v1, v2;
+
+
+        v1 = viewType == ViewType.MAX ? data.yOffset().max : data.yOffset().min;
+        v2 = v1 * 0.5f;
+
+        DecimalFormat format = Formats.getFormat(2);
+        max = format.format(v1);
+        mid = format.format(v2);
 
         final float scaleTime = bounce / maxTime;
         final float scaleFloor = 1f / bounce;
