@@ -73,9 +73,6 @@ public class GraphWidget extends AbstractWidget {
 
 
         float maxTime = animation.maxTime();
-/*        float yOffset = animation.yOffset();
-        float rotScale = animation.angle();
-        float itemScale = animation.itemScale() - 1;*/
         final int bounce = animation.bounce();
 
         float v1, v2;
