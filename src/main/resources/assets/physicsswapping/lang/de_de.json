@@ -1,0 +1,15 @@
+{
+  "text.physicsswapping.config_menu.title": "Haupt",
+  "text.physicsswapping.config_menu.enabled": "Mod umschalten",
+  "text.physicsswapping.config_menu.enabled.on": "Aktiviert",
+  "text.physicsswapping.config_menu.enabled.off": "Deaktiviert",
+  "text.physicsswapping.config_menu.save": "Speichern",
+  "text.physicsswapping.config_menu.swap_values.title": "Parameter",
+  "text.physicsswapping.config_menu.swap_values.duration": "Dauer",
+  "text.physicsswapping.config_menu.swap_values.bounce": "Sprünge",
+  "text.physicsswapping.config_menu.swap_values.angle": "Winkel",
+  "text.physicsswapping.config_menu.swap_values.y_offset": "Höhe",
+  "text.physicsswapping.config_menu.swap_values.item_scale": "Größe",
+  "modmenu.summaryTranslation.physicsswapping": "Hüpfphysik beim Bewegen von Gegenständen im Inventar.",
+  "modmenu.descriptionTranslation.physicsswapping": "Hüpfphysik beim Bewegen von Gegenständen im Inventar."
+}

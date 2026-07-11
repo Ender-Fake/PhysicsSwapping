@@ -1,0 +1,15 @@
+{
+  "text.physicsswapping.config_menu.title": "기본",
+  "text.physicsswapping.config_menu.enabled": "모드 전환",
+  "text.physicsswapping.config_menu.enabled.on": "활성화",
+  "text.physicsswapping.config_menu.enabled.off": "비활성화",
+  "text.physicsswapping.config_menu.save": "저장",
+  "text.physicsswapping.config_menu.swap_values.title": "매개변수",
+  "text.physicsswapping.config_menu.swap_values.duration": "지속 시간",
+  "text.physicsswapping.config_menu.swap_values.bounce": "바운스 횟수",
+  "text.physicsswapping.config_menu.swap_values.angle": "각도",
+  "text.physicsswapping.config_menu.swap_values.y_offset": "높이",
+  "text.physicsswapping.config_menu.swap_values.item_scale": "크기",
+  "modmenu.summaryTranslation.physicsswapping": "인벤토리에서 아이템을 이동할 때 바운스 물리 효과를 추가합니다.",
+  "modmenu.descriptionTranslation.physicsswapping": "인벤토리에서 아이템을 이동할 때 바운스 물리 효과를 추가합니다."
+}

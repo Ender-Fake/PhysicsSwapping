@@ -1,0 +1,15 @@
+{
+  "text.physicsswapping.config_menu.title": "Основне",
+  "text.physicsswapping.config_menu.enabled": "Перемкнути мод",
+  "text.physicsswapping.config_menu.enabled.on": "Увімкнено",
+  "text.physicsswapping.config_menu.enabled.off": "Вимкнено",
+  "text.physicsswapping.config_menu.save": "Зберегти",
+  "text.physicsswapping.config_menu.swap_values.title": "Параметри",
+  "text.physicsswapping.config_menu.swap_values.duration": "Тривалість",
+  "text.physicsswapping.config_menu.swap_values.bounce": "Відскоків",
+  "text.physicsswapping.config_menu.swap_values.angle": "Кут",
+  "text.physicsswapping.config_menu.swap_values.y_offset": "Висота",
+  "text.physicsswapping.config_menu.swap_values.item_scale": "Розмір",
+  "modmenu.summaryTranslation.physicsswapping": "Фізика стрибків при переміщенні предметів в інвентарі.",
+  "modmenu.descriptionTranslation.physicsswapping": "Фізика стрибків при переміщенні предметів в інвентарі."
+}

@@ -1,0 +1,15 @@
+{
+  "text.physicsswapping.config_menu.title": "メイン",
+  "text.physicsswapping.config_menu.enabled": "MODを切り替え",
+  "text.physicsswapping.config_menu.enabled.on": "オン",
+  "text.physicsswapping.config_menu.enabled.off": "オフ",
+  "text.physicsswapping.config_menu.save": "保存",
+  "text.physicsswapping.config_menu.swap_values.title": "パラメータ",
+  "text.physicsswapping.config_menu.swap_values.duration": "持続時間",
+  "text.physicsswapping.config_menu.swap_values.bounce": "バウンス回数",
+  "text.physicsswapping.config_menu.swap_values.angle": "角度",
+  "text.physicsswapping.config_menu.swap_values.y_offset": "高さ",
+  "text.physicsswapping.config_menu.swap_values.item_scale": "サイズ",
+  "modmenu.summaryTranslation.physicsswapping": "インベントリ内でのアイテム移動時にバウンス物理を追加します。",
+  "modmenu.descriptionTranslation.physicsswapping": "インベントリ内でのアイテム移動時にバウンス物理を追加します。"
+}

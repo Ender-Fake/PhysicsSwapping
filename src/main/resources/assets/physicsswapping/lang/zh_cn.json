@@ -1,0 +1,15 @@
+{
+  "text.physicsswapping.config_menu.title": "主要",
+  "text.physicsswapping.config_menu.enabled": "切换模组",
+  "text.physicsswapping.config_menu.enabled.on": "已启用",
+  "text.physicsswapping.config_menu.enabled.off": "已禁用",
+  "text.physicsswapping.config_menu.save": "保存",
+  "text.physicsswapping.config_menu.swap_values.title": "参数",
+  "text.physicsswapping.config_menu.swap_values.duration": "持续时间",
+  "text.physicsswapping.config_menu.swap_values.bounce": "弹跳次数",
+  "text.physicsswapping.config_menu.swap_values.angle": "角度",
+  "text.physicsswapping.config_menu.swap_values.y_offset": "高度",
+  "text.physicsswapping.config_menu.swap_values.item_scale": "大小",
+  "modmenu.summaryTranslation.physicsswapping": "在背包中移动物品时的弹跳物理。",
+  "modmenu.descriptionTranslation.physicsswapping": "在背包中移动物品时的弹跳物理。"
+}

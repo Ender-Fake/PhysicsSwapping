@@ -1,0 +1,15 @@
+{
+  "text.physicsswapping.config_menu.title": "Principal",
+  "text.physicsswapping.config_menu.enabled": "Alternar mod",
+  "text.physicsswapping.config_menu.enabled.on": "Activado",
+  "text.physicsswapping.config_menu.enabled.off": "Desactivado",
+  "text.physicsswapping.config_menu.save": "Guardar",
+  "text.physicsswapping.config_menu.swap_values.title": "Parámetros",
+  "text.physicsswapping.config_menu.swap_values.duration": "Duración",
+  "text.physicsswapping.config_menu.swap_values.bounce": "Rebotes",
+  "text.physicsswapping.config_menu.swap_values.angle": "Ángulo",
+  "text.physicsswapping.config_menu.swap_values.y_offset": "Altura",
+  "text.physicsswapping.config_menu.swap_values.item_scale": "Tamaño",
+  "modmenu.summaryTranslation.physicsswapping": "Física de salto al mover objetos en el inventario.",
+  "modmenu.descriptionTranslation.physicsswapping": "Física de salto al mover objetos en el inventario."
+}
