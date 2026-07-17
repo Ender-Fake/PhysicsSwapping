@@ -15,7 +15,7 @@ public class PhysicsSwappingClient implements ClientModInitializer {
 
         ScreenEvents.BEFORE_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
             if (screen instanceof AbstractContainerScreen<?>) {
-                ScreenEvents.remove(screen).register(_ -> GuiRenderProcessor.clearSlots());
+                ScreenEvents.remove(screen).register(s -> GuiRenderProcessor.clearSlots());
             }
         });
 

@@ -4,7 +4,7 @@ import com.enderium.physicsswapping.client.gui.components.range.Formats;
 import com.enderium.physicsswapping.client.render.AnimationData;
 import com.enderium.physicsswapping.client.render.ItemAnimation;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.sounds.SoundManager;
@@ -33,24 +33,27 @@ public class GraphWidget extends AbstractWidget {
     }
 
     @Override
-    protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float a) {
         int x = getX();
         int y = getY();
-        graphics.fill(x, y, getRight(), getBottom(), 0x73000000);
-        graphics.outline(x, y, width, height, -1);
+        int right=x+width;
+        int bottom=y+height;
+        graphics.fill(x, y, right, bottom, 0x73000000);
+        graphics.renderOutline(x, y, width, height, -1);
         //new Color(0x66E6E6E6, true)
         int divHeight = height >> 1;
-        graphics.verticalLine(x + (width >> 1), y, getBottom(), 0x66E6E6E6);
-        graphics.horizontalLine(x, getRight(), y + divHeight, 0x66E6E6E6);
+        graphics.vLine(x + (width >> 1), y, bottom, 0x66E6E6E6);
+        graphics.hLine(x, right, y + divHeight, 0x66E6E6E6);
 
 
 
 
-        graphics.horizontalLine(x, getRight(), y + divHeight, 0x66E6E6E6);
+        graphics.hLine(x, right, y + divHeight, 0x66E6E6E6);
 
-        graphics.text(font, max, x - 2 - (font.width(max)), y, 0x66E6E6E6);
-        graphics.text(font, mid, x - 2 - (font.width(mid)), y + (height >> 1) - (font.lineHeight >> 1), 0x66E6E6E6);
-        graphics.text(font, "0", x - 2 - (font.width("0")), y + height - font.lineHeight, 0x66E6E6E6);
+
+        graphics.drawString(font, max, x - 2 - (font.width(max)), y, 0x66E6E6E6);
+        graphics.drawString(font, mid, x - 2 - (font.width(mid)), y + (height >> 1) - (font.lineHeight >> 1), 0x66E6E6E6);
+        graphics.drawString(font, "0", x - 2 - (font.width("0")), y + height - font.lineHeight, 0x66E6E6E6);
 
         for (Vector2i pos : points) {
             int xx = pos.x + x, yy = pos.y + y;

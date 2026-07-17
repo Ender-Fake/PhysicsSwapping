@@ -3,10 +3,9 @@ package com.enderium.physicsswapping.client.gui.components;
 import com.enderium.physicsswapping.client.gui.components.range.NumberRange;
 import com.enderium.physicsswapping.util.EventManager;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 
 public class SliderWidget extends AbstractWidget {
@@ -31,7 +30,8 @@ public class SliderWidget extends AbstractWidget {
     }
 
     public void progress(double scroll) {
-        progress = Math.clamp(scroll, 0, 1);
+
+        progress = Math.min(1, Math.max(scroll, 0));
         cacheAmount = range.getText(progress);
 
     }
@@ -49,19 +49,21 @@ public class SliderWidget extends AbstractWidget {
     }
 
 
+
     @Override
-    protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float a) {
 
         int height = this.height >> 1;
         int y = getY() + height;
+        int right= getX()+width;
         boolean orFocused = isHoveredOrFocused();
 
         int lineColor = orFocused ? 0xFFCFCFCF : 0xFFB1B1B1;
 
-        graphics.horizontalLine(getX(), getRight(), y, lineColor);
-        graphics.verticalLine(getX(), y - 4, y + 4, lineColor);
-        graphics.verticalLine(getRight(), y - 4, y + 4, lineColor);
-        graphics.verticalLine(getX() + (width >> 1), y - 2, y + 2, lineColor);
+        graphics.hLine(getX(), right, y, lineColor);
+        graphics.vLine(getX(), y - 4, y + 4, lineColor);
+        graphics.vLine(right, y - 4, y + 4, lineColor);
+        graphics.vLine(getX() + (width >> 1), y - 2, y + 2, lineColor);
 
         int x = getX() + (int) (width * progress());
 
@@ -69,11 +71,11 @@ public class SliderWidget extends AbstractWidget {
 
         int xOffset = progress < 0 ? font.width("-") : 0;
 
-        graphics.centeredText(font, cacheAmount, getX() + (width >> 1) + xOffset, y + 8, orFocused ? 0xFFFFFFFF : 0xFFB1B1B1);
+        graphics.drawCenteredString(font, cacheAmount, getX() + (width >> 1) + xOffset, y + 8, orFocused ? 0xFFFFFFFF : 0xFFB1B1B1);
     }
 
     @Override
-    public boolean mouseScrolled(double x, double y, double scrollX, double scrollY) {
+    public boolean mouseScrolled(double x, double y, double scrollY) {
         if (!this.visible) return false;
         this.scroll(-scrollY * 0.01f);
         change();
@@ -81,17 +83,15 @@ public class SliderWidget extends AbstractWidget {
     }
 
     @Override
-    protected void onDrag(MouseButtonEvent event, double dx, double dy) {
-        if (event.button() != 0) return;
-        double x = event.x();
+    protected void onDrag(double x, double y, double dx, double dy) {
         if (x < getX()) progress(0);
-        else if (x > getRight()) progress(1);
+        else if (x > getX()+width) progress(1);
         else progress((x - getX()) / width);
 
     }
 
     @Override
-    public void onRelease(MouseButtonEvent event) {
+    public void onRelease(double x, double y) {
         change();
     }
 

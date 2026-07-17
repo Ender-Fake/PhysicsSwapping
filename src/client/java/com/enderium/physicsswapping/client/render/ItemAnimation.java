@@ -1,7 +1,6 @@
 package com.enderium.physicsswapping.client.render;
 
 import com.enderium.physicsswapping.client.config.PhysicsSwappingConfig.Values;
-import net.minecraft.world.item.ItemStack;
 
 import java.util.Objects;
 
@@ -53,9 +52,8 @@ public final class ItemAnimation {
     }
 
 
-    public void remove(ItemStack stack) {
+    public void remove() {
         GuiRenderProcessor.removeSlot(slot);
-        //GuiRenderProcessor.RENDER_ITEMS.invalidate(stack);
     }
 
     public int slot() {

@@ -5,15 +5,13 @@ import com.enderium.physicsswapping.client.config.data.DualFloatRange;
 import com.enderium.physicsswapping.client.config.data.DualIntRange;
 import com.enderium.physicsswapping.client.gui.components.range.NumberRange;
 import com.enderium.physicsswapping.util.EventManager;
-import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.TextAlignment;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-import org.jspecify.annotations.NonNull;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.Mth;
 
 public class DualSliderWidget extends AbstractWidget {
 
@@ -91,7 +89,7 @@ public class DualSliderWidget extends AbstractWidget {
     }
 
     @Override
-    protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float a) {
         //graphics.outline(getX(), getY(), width, height, 0x6FB1B1B1);
 
 
@@ -102,8 +100,8 @@ public class DualSliderWidget extends AbstractWidget {
 
         OverType onProgress = isOverProgressX(mouseX);
 
-        graphics.centeredText(font, "⟳", x + 10, y - lineCenter, (isHovered && onProgress == OverType.LEFT) ? -1 : 0x6FB1B1B1);
-        graphics.centeredText(font, "⟳", x + width - 10, y - lineCenter, (isHovered && onProgress == OverType.RIGHT) ? -1 : 0x6FB1B1B1);
+        graphics.drawCenteredString(font, "⟳", x + 10, y - lineCenter, (isHovered && onProgress == OverType.LEFT) ? -1 : 0x6FB1B1B1);
+        graphics.drawCenteredString(font, "⟳", x + width - 10, y - lineCenter, (isHovered && onProgress == OverType.RIGHT) ? -1 : 0x6FB1B1B1);
 
         int width = this.width - 40;
         x += 20;
@@ -121,19 +119,15 @@ public class DualSliderWidget extends AbstractWidget {
         }
 
 
-        graphics.horizontalLine(x, x + width, y, lineColor);
-        graphics.verticalLine(x, y - 4, y + 4, lineColor);
-        graphics.verticalLine(x + width, y - 4, y + 4, lineColor);
-        graphics.verticalLine(x + (width >> 1), y - 2, y + 2, lineColor);
+        graphics.hLine(x, x + width, y, lineColor);
+        graphics.vLine(x, y - 4, y + 4, lineColor);
+        graphics.vLine(x + width, y - 4, y + 4, lineColor);
+        graphics.vLine(x + (width >> 1), y - 2, y + 2, lineColor);
 
-        int xP;
-        xP = x + (int) (width * scrollMinProgress());
 
-        graphics.fill(xP - 1, y - 5, xP + 1, y + 5, progressColor);
+        extractProgress(graphics, x, y, width, 5, progressColor, scrollMinProgress());
 
-        xP = x + (int) (width * scrollMaxProgress());
-
-        graphics.fill(xP - 1, y - 5, xP + 1, y + 5, progressColor);
+        extractProgress(graphics, x, y, width, 5, progressColor, scrollMaxProgress());
 
 
         extractText(graphics, x, y, width, orFocused);
@@ -141,24 +135,34 @@ public class DualSliderWidget extends AbstractWidget {
 
     }
 
-    private void extractText(GuiGraphicsExtractor graphics, int x, int y, int width, boolean orFocused) {
+    private void extractProgress(GuiGraphics graphics, int x, int y, int width, int size, int color, double progress) {
+        extractVLine(graphics, x + (int) (width * progress), y, size, color);
+    }
+
+    private void extractVLine(GuiGraphics graphics, int x, int y, int size, int color) {
+        graphics.fill(x - 1, y - size, x + 1, y + size, color);
+    }
+
+    private void extractText(GuiGraphics graphics, int x, int y, int width, boolean orFocused) {
 
         y += 8;
         int xP = x + (width >> 1);
         Component separator = minValue == maxValue ? EQUAL : SEPARATOR;
 
-        ActiveTextCollector renderer = graphics.textRenderer();
-        renderer.accept(TextAlignment.CENTER, xP, y, separator);
-        renderer.accept(TextAlignment.LEFT, x, y, Component.literal(cacheMinAmount).withColor(orFocused ? 0xFFFFFFFF : 0xFFB1B1B1));
-        renderer.accept(TextAlignment.RIGHT, x + width, y, Component.literal(cacheMaxAmount).withColor(orFocused ? 0xFFFFFFFF : 0xFFB1B1B1));
+        graphics.drawCenteredString(font, separator, xP, y, -1);
+        graphics.drawString(font, cacheMinAmount, x, y, orFocused ? 0xFFFFFFFF : 0xFFB1B1B1);
 
-        renderer.accept(TextAlignment.CENTER, xP, getY(), change ? cacheTitleChanged : (orFocused ? cacheTitleHover : cacheTitle));
+        int offset = font.width(cacheMaxAmount);
+        graphics.drawString(font, cacheMaxAmount, x + width - offset, y, orFocused ? 0xFFFFFFFF : 0xFFB1B1B1);
+
+        Component title = change ? cacheTitleChanged : (orFocused ? cacheTitleHover : cacheTitle);
+        graphics.drawCenteredString(font, title, xP, getY(), 0);
 
     }
 
 
     @Override
-    public boolean mouseScrolled(double x, double y, double scrollX, double scrollY) {
+    public boolean mouseScrolled(double x, double y, double scrollY) {
         if (!this.visible) return false;
         double floor = Math.round(scrollY);
         if (isMinCloser(getProgressOf(x))) {
@@ -169,22 +173,20 @@ public class DualSliderWidget extends AbstractWidget {
     }
 
     @Override
-    public void onClick(MouseButtonEvent event, boolean doubleClick) {
-        double x = event.x();
+    public void onClick(double x, double y) {
         if (isOverProgressX(x).isOver()) editProgress = true;
         else {
             if (x < (getX() + 20)) onClickReset.fire(false);
-            else if (x > (getRight() - 20)) onClickReset.fire(true);
+            else if (x > (getX() + width - 20)) onClickReset.fire(true);
 
         }
         minCloser = isMinCloser(getProgressOf(x));
     }
 
     @Override
-    protected void onDrag(MouseButtonEvent event, double dx, double dy) {
-        if (event.button() != 0) return;
+    protected void onDrag(double x, double y, double dx, double dy) {
         if (!editProgress) return;
-        double value = range.value(getProgressOf(event.x()));
+        double value = range.value(getProgressOf(x));
         if (minCloser) scrollMinValue(value);
         else scrollMaxValue(value);
 
@@ -192,7 +194,7 @@ public class DualSliderWidget extends AbstractWidget {
     }
 
     @Override
-    public void onRelease(@NonNull MouseButtonEvent event) {
+    public void onRelease(double x, double y) {
         if (editProgress) {
             editProgress = false;
             change();
@@ -206,13 +208,19 @@ public class DualSliderWidget extends AbstractWidget {
     }
 
     public void setColor(int color, int colorHover, int colorChanged) {
-        cacheTitle = message.copy().withColor(color);
-        cacheTitleHover = message.copy().withColor(colorHover);
-        cacheTitleChanged = message.copy().withColor(colorChanged);
+        Component message = getMessage();
+
+        cacheTitle = setColor(message.copy(), color);
+        cacheTitleHover = setColor(message.copy(), colorHover);
+        cacheTitleChanged = setColor(message.copy(), colorChanged);
+    }
+
+    private MutableComponent setColor(MutableComponent component, int color) {
+        return component.withStyle(style -> style.withColor(color));
     }
 
     public double getProgressOf(double x) {
-        return Math.clamp((x - (getX() + 20)) / (width - 40), 0, 1);
+        return Mth.clamp((x - (getX() + 20)) / (width - 40), 0, 1);
     }
 
     public boolean isMinCloser(double progress) {

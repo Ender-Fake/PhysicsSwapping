@@ -2,8 +2,13 @@ package com.enderium.physicsswapping.client.gui.screens;
 
 import com.enderium.physicsswapping.client.gui.components.ConfigSectionWidget;
 import com.enderium.physicsswapping.client.gui.components.GraphWidget;
+import com.enderium.physicsswapping.client.gui.components.LayoutUtils;
 import com.enderium.physicsswapping.client.gui.components.PhysicsItemWidget;
+import com.enderium.physicsswapping.mixin.client.WidgetAccessor;
 import com.enderium.physicsswapping.util.Rectangle;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -11,23 +16,29 @@ public class ConfigScreen extends Screen {
 
     protected Screen parent;
 
-    private final ConfigSectionWidget sectionWidget = new ConfigSectionWidget(minecraft, 1, 1, 3, this::onClose);
+    private final ConfigSectionWidget sectionWidget;
 
-    private final GraphWidget leftGraph = new GraphWidget(0, 0, 1, 1, font, GraphWidget.ViewType.MIN, sectionWidget.data);
-    private final GraphWidget rightGraph = new GraphWidget(0, 0, 1, 1, font, GraphWidget.ViewType.MAX, sectionWidget.data);
-    private final PhysicsItemWidget[] items = new PhysicsItemWidget[]{
-            new PhysicsItemWidget(sectionWidget.data),
-            new PhysicsItemWidget(sectionWidget.data),
-            new PhysicsItemWidget(sectionWidget.data),
-            new PhysicsItemWidget(sectionWidget.data),
-            new PhysicsItemWidget(sectionWidget.data),
-            new PhysicsItemWidget(sectionWidget.data)
-    };
+    private final GraphWidget leftGraph;
+    private final GraphWidget rightGraph;
+    private final PhysicsItemWidget[] items;
 
 
     public ConfigScreen(Screen parent, Component title) {
         super(title);
         this.parent = parent;
+        this.minecraft = Minecraft.getInstance();
+        Font font = this.minecraft.font;
+        sectionWidget = new ConfigSectionWidget(minecraft, 1, 1, 3, () -> minecraft.doRunTask(this::onClose));
+        leftGraph = new GraphWidget(0, 0, 1, 1, font, GraphWidget.ViewType.MIN, sectionWidget.data);
+        rightGraph = new GraphWidget(0, 0, 1, 1, font, GraphWidget.ViewType.MAX, sectionWidget.data);
+        items = new PhysicsItemWidget[]{
+                new PhysicsItemWidget(sectionWidget.data),
+                new PhysicsItemWidget(sectionWidget.data),
+                new PhysicsItemWidget(sectionWidget.data),
+                new PhysicsItemWidget(sectionWidget.data),
+                new PhysicsItemWidget(sectionWidget.data),
+                new PhysicsItemWidget(sectionWidget.data)
+        };
         sectionWidget.onChanged().subscribe((configSectionWidget, changed) -> {
             leftGraph.calculateGraph();
             rightGraph.calculateGraph();
@@ -43,7 +54,7 @@ public class ConfigScreen extends Screen {
 
         {
 
-            sectionWidget.setRectangle(leftTab.width(), leftTab.height(), leftTab.x(), leftTab.y());
+            LayoutUtils.setRectangle((WidgetAccessor) sectionWidget, leftTab);
             sectionWidget.init();
             sectionWidget.visitWidgets(this::addRenderableWidget);
 
@@ -62,12 +73,12 @@ public class ConfigScreen extends Screen {
                 int offsetGraph = downTab.width() / 5;
                 int yGraph = downTab.centerY() - sizeCenterGraph;
 
-                leftGraph.setRectangle(sizeGraph, sizeGraph,
-                        downTab.centerX() - offsetGraph - sizeCenterGraph, yGraph
-                );
-
-                rightGraph.setRectangle(sizeGraph, sizeGraph,
-                        downTab.centerX() + offsetGraph - sizeCenterGraph, yGraph);
+                LayoutUtils.setRectangle((WidgetAccessor) leftGraph,
+                        downTab.centerX() - offsetGraph - sizeCenterGraph, yGraph,
+                        sizeGraph, sizeGraph);
+                LayoutUtils.setRectangle((WidgetAccessor) rightGraph,
+                        downTab.centerX() + offsetGraph - sizeCenterGraph, yGraph,
+                        sizeGraph, sizeGraph);
 
                 addRenderableWidget(leftGraph).calculateGraph();
                 addRenderableWidget(rightGraph).calculateGraph();
@@ -93,18 +104,16 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double x, double y, double scrollX, double scrollY) {
-        return super.mouseScrolled(x, y, scrollX, scrollY);
+    public void render(GuiGraphics guiGraphics, int i, int j, float f) {
+        renderBackground(guiGraphics);
+        super.render(guiGraphics, i, j, f);
     }
 
-    @Override
-    public boolean shouldCloseOnEsc() {
-        return super.shouldCloseOnEsc();
-    }
 
     @Override
     public void onClose() {
-        this.minecraft.gui.setScreen(parent);
+        assert this.minecraft != null;
+        this.minecraft.doRunTask(() -> this.minecraft.setScreen(parent));
     }
 
 

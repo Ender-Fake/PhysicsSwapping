@@ -14,18 +14,18 @@ import static com.enderium.physicsswapping.client.SwapUtils.processSlot;
 @Mixin(MultiPlayerGameMode.class)
 public class MultiPlayerGameModeMixin {
 
-    @WrapWithCondition(method = "handleContainerInput", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientPacketListener;send(Lnet/minecraft/network/protocol/Packet;)V"))
+    @WrapWithCondition(method = "handleInventoryMouseClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientPacketListener;send(Lnet/minecraft/network/protocol/Packet;)V"))
     public boolean injectContainerAction(ClientPacketListener instance, Packet<ServerGamePacketListener> packet) {
         ServerboundContainerClickPacket p = (ServerboundContainerClickPacket) packet;
 
         processSlot(
-                p.containerId(),
-                p.stateId(),
-                p.slotNum(),
-                p.buttonNum(),
-                p.containerInput(),
-                p.changedSlots(),
-                p.carriedItem()
+                p.getContainerId(),
+                p.getStateId(),
+                p.getSlotNum(),
+                p.getButtonNum(),
+                p.getClickType(),
+                p.getChangedSlots(),
+                p.getCarriedItem()
         );
 
         return true;

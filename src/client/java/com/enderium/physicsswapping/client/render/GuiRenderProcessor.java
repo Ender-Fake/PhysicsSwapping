@@ -1,38 +1,22 @@
 package com.enderium.physicsswapping.client.render;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.RemovalListener;
+import com.mojang.blaze3d.vertex.PoseStack;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.client.renderer.state.gui.GuiItemRenderState;
-import net.minecraft.client.renderer.state.gui.GuiRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
-import org.joml.Matrix3x2f;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 
 public class GuiRenderProcessor {
 
     private static final Int2ObjectMap<ItemAnimation> slotsProcess = new Int2ObjectOpenHashMap<>();
-    public static final Cache<ItemStack, ItemAnimation> RENDER_ITEMS = CacheBuilder.newBuilder().weakKeys().removalListener((RemovalListener<ItemStack, ItemAnimation>) notify -> {
-        if (notify.wasEvicted()) {
-            if (notify.getValue() == null) return;
-            slotsProcess.remove(notify.getValue().slot(), notify.getValue());
-        }
-    }).build();
 
-
-    //public static final IdentityHashMap<ItemAnimation,ItemStack> ANIMATION_TO_ITEMS =new IdentityHashMap<>();
-
-    public static void animationItemSwap(GuiRenderState instance, GuiItemRenderState itemState, ItemAnimation animation, ItemStack stack) {
-        animationItemSwap(itemState.pose(), itemState.x() + 8, itemState.y() + 8, animation, stack);
+    public static void animationItemSwap(PoseStack pose, int x, int y, ItemAnimation animation) {
+        if (animationSwap(pose, x + 8, y + 8, animation)) animation.remove();
     }
 
-    public static void animationItemSwap(Matrix3x2f pose, int x, int y, ItemAnimation animation, ItemStack stack) {
-        if (animationSwap(pose, x, y, animation)) animation.remove(stack);
-    }
-
-    public static boolean animationSwap(Matrix3x2f pose, int x, int y, ItemAnimation animation) {
+    public static boolean animationSwap(PoseStack pose, int x, int y, ItemAnimation animation) {
 
 
         float time = animation.currentTimeOfSeconds();
@@ -55,7 +39,8 @@ public class GuiRenderProcessor {
         float sinScale = (float) (Mth.floor(time - bounce)) * scaleFloor;
         float ping = Mth.sin(time * Mth.PI) * sinScale * sinScale;  // Ping pong
         float abs = Mth.abs(ping);
-        pose.scaleAround(1 + abs * itemScale, x, y).translate(0, -yOffset * abs).rotateAbout(Mth.DEG_TO_RAD * ping * rotScale, x, y + 2);
+        float scaleFactor = 1 + abs * itemScale;
+        pose.mulPoseMatrix(new Matrix4f().translate(0, -yOffset * abs, 0).scaleAround(scaleFactor, scaleFactor, 1, x, y, 0).rotateAround(new Quaternionf().rotationZ(Mth.DEG_TO_RAD * ping * rotScale), x, y + 2, 0));
 
         return timeout;
     }
@@ -84,10 +69,6 @@ public class GuiRenderProcessor {
         if (animation != null) {
             RenderContext.set(animation);
         }
-    }
-
-    public static ItemAnimation getAnimation(ItemStack stack) {
-        return RENDER_ITEMS.getIfPresent(stack);
     }
 
 

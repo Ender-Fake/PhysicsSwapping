@@ -14,24 +14,22 @@ import com.enderium.physicsswapping.util.EventManager;
 import com.enderium.physicsswapping.util.Rectangle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.AbstractContainerWidget;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.ContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class ConfigSectionWidget extends AbstractContainerWidget implements ContainerEventHandler {
+public class ConfigSectionWidget extends AbstractWidget implements ContainerEventHandler {
 
     protected final Minecraft minecraft;
     protected final List<AbstractWidget> children = new ArrayList<>();
@@ -70,7 +68,7 @@ public class ConfigSectionWidget extends AbstractContainerWidget implements Cont
 
 
         tabHeader = Rectangle.of(getX(), getY(), width, 40);
-        Rectangle tabFooter = Rectangle.of(getX(), getBottom() - 40, width, 40);
+        Rectangle tabFooter = Rectangle.of(getX(), getY() + height - 40, width, 40);
         tabContent = Rectangle.of(getX(), tabHeader.height(), width, height - tabHeader.height() - tabFooter.height());
 
         children.clear();
@@ -137,7 +135,7 @@ public class ConfigSectionWidget extends AbstractContainerWidget implements Cont
             self.change();
         });
 
-        widget.onChange().subscribe((_, _) -> onChange());
+        widget.onChange().subscribe((s, v) -> onChange());
 
         return widget;
     }
@@ -148,18 +146,20 @@ public class ConfigSectionWidget extends AbstractContainerWidget implements Cont
     }
 
     @Override
-    protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float a) {
         //graphics.outline(getX(),getY(),width,height-1,-1);
         graphics.fill(tabContent.x(), tabContent.y(), tabContent.right(), tabContent.bottom(), 0x73000000);
 
         drawTabsShades(graphics);
 
-        graphics.verticalLine(getRight(), getY() - 1, getBottom(), 0xA3888888);
+        graphics.vLine(getX() + width, getY() - 1, getY() + height, 0xA3888888);
 
         Font font = minecraft.font;
-        graphics.centeredText(font, message, tabHeader.centerX(), tabHeader.centerY() - (font.lineHeight >> 1), -1);
+        graphics.drawCenteredString(font, getMessage(), tabHeader.centerX(), tabHeader.centerY() - (font.lineHeight >> 1), -1);
 
-        children.forEach(configEntry -> configEntry.extractRenderState(graphics, mouseX, mouseY, a));
+        graphics.enableScissor(tabContent.x(), tabContent.y(), tabContent.right(), tabContent.bottom());
+        children.forEach(configEntry -> configEntry.render(graphics, mouseX, mouseY, a));
+        graphics.disableScissor();
 
     }
 
@@ -168,14 +168,12 @@ public class ConfigSectionWidget extends AbstractContainerWidget implements Cont
 
     }
 
-    private void drawTabsShades(GuiGraphicsExtractor graphics) {
-        graphics.blit(RenderPipelines.GUI_TEXTURED, Screen.HEADER_SEPARATOR, tabContent.x(), tabContent.y(), 0.0F, 0.0F, tabContent.width(), 2, 32, 2);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, Screen.FOOTER_SEPARATOR, tabContent.x(), tabContent.bottom(), 0.0F, 0.0F, tabContent.width(), 2, 32, 2);
-    }
+    private void drawTabsShades(GuiGraphics graphics) {
+        graphics.hLine(tabContent.x(), tabContent.right(), tabContent.y(), 0x33FFFFFF);
+        graphics.hLine(tabContent.x(), tabContent.right(), tabContent.y() + 1, 0xBF000000);
 
-    @Override
-    protected int contentHeight() {
-        return contentHeight;
+        graphics.hLine(tabContent.x(), tabContent.right(), tabContent.bottom(), 0xBF000000);
+        graphics.hLine(tabContent.x(), tabContent.right(), tabContent.bottom() + 1, 0x33FFFFFF);
     }
 
     public <T extends AbstractWidget> T addEntry(T entry) {
@@ -189,17 +187,68 @@ public class ConfigSectionWidget extends AbstractContainerWidget implements Cont
         return Collections.unmodifiableList(this.children);
     }
 
+    private boolean dragging;
+    private GuiEventListener focused;
+
     @Override
-    public void visitWidgets(Consumer<AbstractWidget> widgetVisitor) {
-        super.visitWidgets(widgetVisitor);
-        children.forEach(widgetVisitor);
+    public boolean isDragging() {
+        return dragging;
     }
 
     @Override
-    public boolean mouseScrolled(double mx, double my, double scrollX, double scrollY) {
-        if (this.getChildAt(mx, my).filter(child -> child.mouseScrolled(mx, my, scrollX, scrollY)).isPresent())
-            return true;
-        return super.mouseScrolled(mx, my, scrollX, scrollY);
+    public void setDragging(boolean bl) {
+        dragging = bl;
+    }
+
+    @Override
+    public @Nullable GuiEventListener getFocused() {
+        return focused;
+    }
+
+    @Override
+    public void setFocused(@Nullable GuiEventListener guiEventListener) {
+        if (this.focused != null) {
+            this.focused.setFocused(false);
+        }
+
+        if (guiEventListener != null) {
+            guiEventListener.setFocused(true);
+        }
+
+        this.focused = guiEventListener;
+    }
+
+    @Override
+    public void visitWidgets(Consumer<AbstractWidget> widgetVisitor) {
+        super.visitWidgets(widgetVisitor);
+        for (AbstractWidget w : children) {
+            if (!(w instanceof DualSliderWidget)) widgetVisitor.accept(w);
+        }
+    }
+
+
+    @Override
+    public boolean mouseClicked(double d, double e, int i) {
+        return ContainerEventHandler.super.mouseClicked(d, e, i);
+    }
+
+    @Override
+    public boolean mouseDragged(double d, double e, int i, double f, double g) {
+        return ContainerEventHandler.super.mouseDragged(d, e, i, f, g);
+    }
+
+    @Override
+    public boolean mouseReleased(double d, double e, int i) {
+        this.setDragging(false);
+        for (AbstractWidget child : children) {
+            child.mouseReleased(d, e, i);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isMouseOver(double d, double e) {
+        return true;
     }
 
     public EventManager<ConfigSectionWidget, Boolean> onChanged() {

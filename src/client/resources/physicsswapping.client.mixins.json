@@ -2,13 +2,13 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.enderium.physicsswapping.mixin.client",
-  "compatibilityLevel": "JAVA_25",
+  "compatibilityLevel": "JAVA_17",
   "client": [
     "AbstractContainerScreenMixin",
+    "ClientPacketListenerMixin",
     "GuiGraphicsExtractorMixin",
     "MultiPlayerGameModeMixin",
-    "ClientPacketListenerMixin"
-
+    "WidgetAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
