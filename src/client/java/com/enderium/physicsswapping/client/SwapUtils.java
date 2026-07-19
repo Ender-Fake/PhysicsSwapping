@@ -8,25 +8,47 @@ import net.minecraft.network.HashedStack;
 import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.function.IntFunction;
+
 public class SwapUtils {
 
     private static final Minecraft MC = Minecraft.getInstance();
 
     public static void processSlot(int containerId, int stateId, short slotNum, byte buttonNum, ContainerInput containerInput, Int2ObjectMap<HashedStack> changedSlots, HashedStack carriedItem) {
+        if (slotNum < 0) return;
         if (containerInput == ContainerInput.THROW) return;
         if (containerInput == ContainerInput.CLONE) return;
-
         if (changedSlots.isEmpty()) return;
-
+        IntFunction<ItemStack> inventory = SavedInventory.getterInventory();
         changedSlots.forEach((i, stack) -> {
-            if (i == slotNum) return;
-            if (stack == HashedStack.EMPTY) GuiRenderProcessor.removeSlot(i);
-            else GuiRenderProcessor.addSlot(i, SwapSource.PACKET);
+            if (i == slotNum) {
+                SavedInventory.setItem(i, ItemStack.EMPTY);
+                return;
+            }
+            if (stack == HashedStack.EMPTY) {
+                SavedInventory.setItem(i, ItemStack.EMPTY);
+                GuiRenderProcessor.removeSlot(i);
+                return;
+            }
+            ItemStack apply = inventory.apply(i);
+            boolean is = SavedInventory.checkItem(i, apply);
+            SavedInventory.setCopyItem(i, apply);
+            if (is && containerInput == ContainerInput.PICKUP) return;
+            GuiRenderProcessor.addSlot(i, SwapSource.PACKET);
         });
     }
 
     public static void onChangeSlot(int containerId, int slot, ItemStack stack) {
-        if (stack.isEmpty()) return;
+        if (slot < 0) return;
+        if (stack.isEmpty()) {
+            SavedInventory.setItem(slot, ItemStack.EMPTY);
+            return;
+        }
+        if (SavedInventory.checkItem(slot, stack)) {
+            SavedInventory.setCopyItem(slot, stack);
+            return;
+        }
+        SavedInventory.setCopyItem(slot, stack);
         GuiRenderProcessor.addSlot(slot, SwapSource.SET_CLOT);
     }
 
