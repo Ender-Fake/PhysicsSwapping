@@ -15,7 +15,6 @@ public class SwapUtils {
     private static final Minecraft MC = Minecraft.getInstance();
 
     public static void processSlot(int containerId, int stateId, short slotNum, byte buttonNum, ContainerInput containerInput, Int2ObjectMap<HashedStack> changedSlots, HashedStack carriedItem) {
-        if (slotNum < 0) return;
         if (containerInput == ContainerInput.THROW) return;
         if (containerInput == ContainerInput.CLONE) return;
         if (changedSlots.isEmpty()) return;
@@ -23,6 +22,7 @@ public class SwapUtils {
         changedSlots.forEach((i, stack) -> {
             if (i == slotNum) {
                 SavedInventory.setItem(i, ItemStack.EMPTY);
+                GuiRenderProcessor.removeSlot(i);
                 return;
             }
             if (stack == HashedStack.EMPTY) {
