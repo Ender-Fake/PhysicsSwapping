@@ -26,7 +26,6 @@ public class ConfigScreen extends Screen {
     public ConfigScreen(Screen parent, Component title) {
         super(title);
         this.parent = parent;
-        this.minecraft = Minecraft.getInstance();
         Font font = this.minecraft.font;
         sectionWidget = new ConfigSectionWidget(minecraft, 1, 1, 3, () -> minecraft.doRunTask(this::onClose));
         leftGraph = new GraphWidget(0, 0, 1, 1, font, GraphWidget.ViewType.MIN, sectionWidget.data);
@@ -105,14 +104,12 @@ public class ConfigScreen extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int i, int j, float f) {
-        renderBackground(guiGraphics,i,j,f);
         super.render(guiGraphics, i, j, f);
     }
 
 
     @Override
     public void onClose() {
-        assert this.minecraft != null;
         this.minecraft.doRunTask(() -> this.minecraft.setScreen(parent));
     }
 

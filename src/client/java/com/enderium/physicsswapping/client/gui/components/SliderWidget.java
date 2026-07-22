@@ -6,6 +6,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 
 public class SliderWidget extends AbstractWidget {
@@ -83,15 +84,17 @@ public class SliderWidget extends AbstractWidget {
     }
 
     @Override
-    protected void onDrag(double x, double y, double dx, double dy) {
+    protected void onDrag(MouseButtonEvent event, double dx, double dy) {
+        if (event.button() != 0) return;
+        double x = event.x();
         if (x < getX()) progress(0);
-        else if (x > getX()+width) progress(1);
+        else if (x > getRight()) progress(1);
         else progress((x - getX()) / width);
 
     }
 
     @Override
-    public void onRelease(double x, double y) {
+    public void onRelease(MouseButtonEvent event) {
         change();
     }
 

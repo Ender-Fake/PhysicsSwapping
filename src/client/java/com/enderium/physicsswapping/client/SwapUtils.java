@@ -5,6 +5,7 @@ import com.enderium.physicsswapping.client.render.SwapSource;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+import net.minecraft.network.HashedStack;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.ItemStack;
 
@@ -14,19 +15,18 @@ public class SwapUtils {
 
     private static final Minecraft MC = Minecraft.getInstance();
 
-    public static void processSlot(int containerId, int stateId, int slotNum, int buttonNum, ClickType containerInput, Int2ObjectMap<ItemStack> changedSlots, ItemStack carriedItem) {
-        if (MC.screen instanceof CreativeModeInventoryScreen) return;
+    public static void processSlot(int containerId, int stateId, short slotNum, byte buttonNum, ClickType containerInput, Int2ObjectMap<HashedStack> changedSlots, HashedStack carriedItem) {
         if (containerInput == ClickType.THROW) return;
         if (containerInput == ClickType.CLONE) return;
         if (changedSlots.isEmpty()) return;
         IntFunction<ItemStack> inventory = SavedInventory.getterInventory();
         changedSlots.forEach((i, stack) -> {
             if (i == slotNum&&containerInput == ClickType.PICKUP) {
-                SavedInventory.setCopyItem(i, stack);
+                SavedInventory.setItem(i, ItemStack.EMPTY);
                 GuiRenderProcessor.removeSlot(i);
                 return;
             }
-            if (stack.isEmpty()) {
+            if (stack == HashedStack.EMPTY) {
                 SavedInventory.setItem(i, ItemStack.EMPTY);
                 GuiRenderProcessor.removeSlot(i);
                 return;

@@ -9,9 +9,11 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
+import org.jspecify.annotations.NonNull;
 
 public class DualSliderWidget extends AbstractWidget {
 
@@ -156,7 +158,7 @@ public class DualSliderWidget extends AbstractWidget {
         graphics.drawString(font, cacheMaxAmount, x + width - offset, y, orFocused ? 0xFFFFFFFF : 0xFFB1B1B1);
 
         Component title = change ? cacheTitleChanged : (orFocused ? cacheTitleHover : cacheTitle);
-        graphics.drawCenteredString(font, title, xP, getY(), 0);
+        graphics.drawCenteredString(font, title, xP, getY(), -1);
 
     }
 
@@ -173,20 +175,22 @@ public class DualSliderWidget extends AbstractWidget {
     }
 
     @Override
-    public void onClick(double x, double y) {
+    public void onClick(MouseButtonEvent event, boolean doubleClick) {
+        double x = event.x();
         if (isOverProgressX(x).isOver()) editProgress = true;
         else {
             if (x < (getX() + 20)) onClickReset.fire(false);
-            else if (x > (getX() + width - 20)) onClickReset.fire(true);
+            else if (x > (getRight() - 20)) onClickReset.fire(true);
 
         }
         minCloser = isMinCloser(getProgressOf(x));
     }
 
     @Override
-    protected void onDrag(double x, double y, double dx, double dy) {
+    protected void onDrag(MouseButtonEvent event, double dx, double dy) {
+        if (event.button() != 0) return;
         if (!editProgress) return;
-        double value = range.value(getProgressOf(x));
+        double value = range.value(getProgressOf(event.x()));
         if (minCloser) scrollMinValue(value);
         else scrollMaxValue(value);
 
@@ -194,7 +198,7 @@ public class DualSliderWidget extends AbstractWidget {
     }
 
     @Override
-    public void onRelease(double x, double y) {
+    public void onRelease(@NonNull MouseButtonEvent event) {
         if (editProgress) {
             editProgress = false;
             change();

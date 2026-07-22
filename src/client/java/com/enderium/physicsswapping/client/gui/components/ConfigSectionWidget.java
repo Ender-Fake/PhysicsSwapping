@@ -21,6 +21,7 @@ import net.minecraft.client.gui.components.events.ContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
@@ -170,8 +171,8 @@ public class ConfigSectionWidget extends AbstractWidget implements ContainerEven
     }
 
     private void drawTabsShades(GuiGraphics graphics) {
-        graphics.blit(Screen.INWORLD_HEADER_SEPARATOR, tabContent.x(), tabContent.y(), 0.0F, 0.0F, tabContent.width(), 2, 32, 2);
-        graphics.blit(Screen.INWORLD_FOOTER_SEPARATOR, tabContent.x(), tabContent.bottom(), 0.0F, 0.0F, tabContent.width(), 2, 32, 2);
+        graphics.blit(Screen.INWORLD_HEADER_SEPARATOR, tabContent.x(), tabContent.y(), 0, 0, tabContent.width(), 2, 32, 2);
+        graphics.blit(Screen.INWORLD_FOOTER_SEPARATOR, tabContent.x(), tabContent.bottom(), 0, 0, tabContent.width(), 2, 32, 2);
     }
     public <T extends AbstractWidget> T addEntry(T entry) {
         children.add(entry);
@@ -225,28 +226,24 @@ public class ConfigSectionWidget extends AbstractWidget implements ContainerEven
 
 
     @Override
-    public boolean mouseClicked(double d, double e, int i) {
-        return ContainerEventHandler.super.mouseClicked(d, e, i);
+    public boolean mouseClicked(MouseButtonEvent mouseButtonEvent, boolean bl) {
+        return ContainerEventHandler.super.mouseClicked(mouseButtonEvent, bl);
     }
 
     @Override
-    public boolean mouseDragged(double d, double e, int i, double f, double g) {
-        return ContainerEventHandler.super.mouseDragged(d, e, i, f, g);
+    public boolean mouseDragged(MouseButtonEvent mouseButtonEvent, double d, double e) {
+        return ContainerEventHandler.super.mouseDragged(mouseButtonEvent, d, e);
     }
 
     @Override
-    public boolean mouseReleased(double d, double e, int i) {
+    public boolean mouseReleased(MouseButtonEvent mouseButtonEvent) {
         this.setDragging(false);
         for (AbstractWidget child : children) {
-            child.mouseReleased(d, e, i);
+            child.mouseReleased(mouseButtonEvent);
         }
         return true;
     }
 
-    @Override
-    public boolean isMouseOver(double d, double e) {
-        return true;
-    }
 
     public EventManager<ConfigSectionWidget, Boolean> onChanged() {
         return onChanged;

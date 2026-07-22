@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class AbstractContainerScreenMixin {
 
     @Inject(method = "renderSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/Slot;isFake()Z"))
-    public void extractSlot(GuiGraphics guiGraphics, Slot slot, CallbackInfo ci) {
+    public void extractSlot(GuiGraphics guiGraphics, Slot slot, int i, int j, CallbackInfo ci) {
         if ((Object)this instanceof CreativeModeInventoryScreen)return;
         GuiRenderProcessor.extractItemInSlot(slot.index, slot.getItem());
 
@@ -23,7 +23,7 @@ public class AbstractContainerScreenMixin {
 
     //@Inject(method = "renderSlot", at = @At("RETURN"))
     @Inject(method = "renderSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;renderItemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V"))
-    private void clear(GuiGraphics guiGraphics, Slot slot, CallbackInfo ci) {
+    private void clear(GuiGraphics guiGraphics, Slot slot, int i, int j, CallbackInfo ci) {
         RenderContext.clearValues();
     }
 

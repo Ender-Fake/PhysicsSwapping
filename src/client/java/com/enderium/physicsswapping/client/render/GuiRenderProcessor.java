@@ -3,8 +3,11 @@ package com.enderium.physicsswapping.client.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.client.gui.render.state.GuiItemRenderState;
+import net.minecraft.client.gui.render.state.GuiRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Matrix3x2f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
@@ -12,11 +15,14 @@ public class GuiRenderProcessor {
 
     private static final Int2ObjectMap<ItemAnimation> slotsProcess = new Int2ObjectOpenHashMap<>();
 
-    public static void animationItemSwap(PoseStack pose, int x, int y, ItemAnimation animation) {
+    public static void animationItemSwap(GuiItemRenderState state, ItemAnimation animation) {
+        animationItemSwap(state.pose(),state.x(),state.y(),animation);
+    }
+    public static void animationItemSwap(Matrix3x2f pose, int x, int y, ItemAnimation animation) {
         if (animationSwap(pose, x + 8, y + 8, animation)) animation.remove();
     }
 
-    public static boolean animationSwap(PoseStack pose, int x, int y, ItemAnimation animation) {
+    public static boolean animationSwap(Matrix3x2f pose, int x, int y, ItemAnimation animation) {
 
         float time = animation.currentTimeOfSeconds();
 
@@ -39,7 +45,7 @@ public class GuiRenderProcessor {
         float ping = Mth.sin(time * Mth.PI) * sinScale * sinScale;  // Ping pong
         float abs = Mth.abs(ping);
         float scaleFactor = 1 + abs * itemScale;
-        pose.mulPose(new Matrix4f().translate(0, -yOffset * abs, 0).scaleAround(scaleFactor, scaleFactor, 1, x, y, 0).rotateAround(new Quaternionf().rotationZ(Mth.DEG_TO_RAD * ping * rotScale), x, y + 2, 0));
+        pose.scaleAround(scaleFactor, x, y).translate(0, -yOffset * abs).rotateAbout(Mth.DEG_TO_RAD * ping * rotScale, x, y + 2);
 
         return timeout;
     }

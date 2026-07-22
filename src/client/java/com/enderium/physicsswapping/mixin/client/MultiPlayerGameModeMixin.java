@@ -19,13 +19,13 @@ public class MultiPlayerGameModeMixin {
         ServerboundContainerClickPacket p = (ServerboundContainerClickPacket) packet;
 
         processSlot(
-                p.getContainerId(),
-                p.getStateId(),
-                p.getSlotNum(),
-                p.getButtonNum(),
-                p.getClickType(),
-                p.getChangedSlots(),
-                p.getCarriedItem()
+                p.containerId(),
+                p.stateId(),
+                p.slotNum(),
+                p.buttonNum(),
+                p.clickType(),
+                p.changedSlots(),
+                p.carriedItem()
         );
 
         return true;

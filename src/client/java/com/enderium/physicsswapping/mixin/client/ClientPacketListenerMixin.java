@@ -21,7 +21,7 @@ public class ClientPacketListenerMixin {
 
     @Inject(method = "handleContainerContent", at = @At("RETURN"))
     public void initSlots(ClientboundContainerSetContentPacket packet, CallbackInfo ci) {
-        SavedInventory.initInventory(packet.getItems());
+        SavedInventory.initInventory(packet.items());
 
     }
 

@@ -3,18 +3,21 @@ package com.enderium.physicsswapping.client.gui.components;
 import com.enderium.physicsswapping.client.render.AnimationData;
 import com.enderium.physicsswapping.client.render.GuiRenderProcessor;
 import com.enderium.physicsswapping.client.render.ItemAnimation;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.data.AtlasIds;
 import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.resources.Identifier;
+import org.joml.Matrix3x2fStack;
+import org.jspecify.annotations.NonNull;
 
 public class PhysicsItemWidget extends AbstractWidget {
-    private static final ResourceLocation ITEM_TEXTURE = ResourceLocation.tryParse("item/diamond");
+    private static final Identifier ITEM_TEXTURE = Identifier.withDefaultNamespace("item/diamond");
     private final AnimationData data;
     private ItemAnimation animation;
 
@@ -37,22 +40,22 @@ public class PhysicsItemWidget extends AbstractWidget {
             return;
         }
 
-        PoseStack pose = graphics.pose();
-        pose.pushPose();
+        Matrix3x2fStack pose = graphics.pose();
+        pose.pushMatrix();
         if (GuiRenderProcessor.animationSwap(pose, getX() + 8, getY() + 8, animation)) clearAnimation();
         drawItem(graphics);
-        pose.popPose();
+        pose.popMatrix();
     }
 
     public void drawItem(GuiGraphics graphics) {
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ITEM_TEXTURE);
-        graphics.blit(getX(), getY(), 0, 16, 16,sprite);
+        TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.ITEMS).getSprite(ITEM_TEXTURE);
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, getX(), getY(), 16, 16);
 
     }
 
 
     @Override
-    public void onClick(double x, double y) {
+    public void onClick(@NonNull MouseButtonEvent event, boolean doubleClick) {
         runAnimation();
     }
 
