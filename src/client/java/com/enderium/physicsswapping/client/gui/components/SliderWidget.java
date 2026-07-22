@@ -31,7 +31,7 @@ public class SliderWidget extends AbstractWidget {
 
     public void progress(double scroll) {
 
-        progress = Math.min(1, Math.max(scroll, 0));
+        progress = Math.clamp(scroll, 0, 1);
         cacheAmount = range.getText(progress);
 
     }
@@ -75,7 +75,7 @@ public class SliderWidget extends AbstractWidget {
     }
 
     @Override
-    public boolean mouseScrolled(double x, double y, double scrollY) {
+    public boolean mouseScrolled(double x, double y, double scrollX, double scrollY) {
         if (!this.visible) return false;
         this.scroll(-scrollY * 0.01f);
         change();

@@ -18,7 +18,6 @@ public class GuiRenderProcessor {
 
     public static boolean animationSwap(PoseStack pose, int x, int y, ItemAnimation animation) {
 
-
         float time = animation.currentTimeOfSeconds();
 
         float maxTime = animation.maxTime();
@@ -40,7 +39,7 @@ public class GuiRenderProcessor {
         float ping = Mth.sin(time * Mth.PI) * sinScale * sinScale;  // Ping pong
         float abs = Mth.abs(ping);
         float scaleFactor = 1 + abs * itemScale;
-        pose.mulPoseMatrix(new Matrix4f().translate(0, -yOffset * abs, 0).scaleAround(scaleFactor, scaleFactor, 1, x, y, 0).rotateAround(new Quaternionf().rotationZ(Mth.DEG_TO_RAD * ping * rotScale), x, y + 2, 0));
+        pose.mulPose(new Matrix4f().translate(0, -yOffset * abs, 0).scaleAround(scaleFactor, scaleFactor, 1, x, y, 0).rotateAround(new Quaternionf().rotationZ(Mth.DEG_TO_RAD * ping * rotScale), x, y + 2, 0));
 
         return timeout;
     }

@@ -162,7 +162,7 @@ public class DualSliderWidget extends AbstractWidget {
 
 
     @Override
-    public boolean mouseScrolled(double x, double y, double scrollY) {
+    public boolean mouseScrolled(double x, double y, double scrollX, double scrollY) {
         if (!this.visible) return false;
         double floor = Math.round(scrollY);
         if (isMinCloser(getProgressOf(x))) {

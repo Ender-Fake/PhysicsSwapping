@@ -20,6 +20,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.ContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
@@ -152,7 +153,7 @@ public class ConfigSectionWidget extends AbstractWidget implements ContainerEven
 
         drawTabsShades(graphics);
 
-        graphics.vLine(getX() + width, getY() - 1, getY() + height, 0xA3888888);
+        graphics.vLine(getX() + width, getY() - 1, getY() + height, 0xB3FFFFFF);
 
         Font font = minecraft.font;
         graphics.drawCenteredString(font, getMessage(), tabHeader.centerX(), tabHeader.centerY() - (font.lineHeight >> 1), -1);
@@ -169,13 +170,9 @@ public class ConfigSectionWidget extends AbstractWidget implements ContainerEven
     }
 
     private void drawTabsShades(GuiGraphics graphics) {
-        graphics.hLine(tabContent.x(), tabContent.right(), tabContent.y(), 0x33FFFFFF);
-        graphics.hLine(tabContent.x(), tabContent.right(), tabContent.y() + 1, 0xBF000000);
-
-        graphics.hLine(tabContent.x(), tabContent.right(), tabContent.bottom(), 0xBF000000);
-        graphics.hLine(tabContent.x(), tabContent.right(), tabContent.bottom() + 1, 0x33FFFFFF);
+        graphics.blit(Screen.INWORLD_HEADER_SEPARATOR, tabContent.x(), tabContent.y(), 0.0F, 0.0F, tabContent.width(), 2, 32, 2);
+        graphics.blit(Screen.INWORLD_FOOTER_SEPARATOR, tabContent.x(), tabContent.bottom(), 0.0F, 0.0F, tabContent.width(), 2, 32, 2);
     }
-
     public <T extends AbstractWidget> T addEntry(T entry) {
         children.add(entry);
         return entry;
