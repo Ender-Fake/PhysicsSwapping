@@ -60,7 +60,7 @@ public class ConfigSectionWidget extends AbstractContainerWidget implements Cont
     );
 
     public ConfigSectionWidget(Minecraft minecraft, int width, int height, int offsetY, Runnable closeMenu) {
-        super(0, 0, width, height, ConfigText.TITLE_SWAP.get());
+        super(0, 0, width, height, ConfigText.TITLE_SWAP.get(),defaultSettings(10));
         this.minecraft = minecraft;
         this.offsetY = offsetY;
         this.closeMenu = closeMenu;
