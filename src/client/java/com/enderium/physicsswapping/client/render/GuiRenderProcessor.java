@@ -1,23 +1,20 @@
 package com.enderium.physicsswapping.client.render;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.gui.render.state.GuiItemRenderState;
-import net.minecraft.client.gui.render.state.GuiRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix3x2f;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 
 public class GuiRenderProcessor {
 
     private static final Int2ObjectMap<ItemAnimation> slotsProcess = new Int2ObjectOpenHashMap<>();
 
     public static void animationItemSwap(GuiItemRenderState state, ItemAnimation animation) {
-        animationItemSwap(state.pose(),state.x(),state.y(),animation);
+        animationItemSwap(state.pose(), state.x(), state.y(), animation);
     }
+
     public static void animationItemSwap(Matrix3x2f pose, int x, int y, ItemAnimation animation) {
         if (animationSwap(pose, x + 8, y + 8, animation)) animation.remove();
     }

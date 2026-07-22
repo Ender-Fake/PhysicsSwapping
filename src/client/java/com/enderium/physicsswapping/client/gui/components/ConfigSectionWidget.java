@@ -174,6 +174,7 @@ public class ConfigSectionWidget extends AbstractWidget implements ContainerEven
         graphics.blit(Screen.INWORLD_HEADER_SEPARATOR, tabContent.x(), tabContent.y(), 0, 0, tabContent.width(), 2, 32, 2);
         graphics.blit(Screen.INWORLD_FOOTER_SEPARATOR, tabContent.x(), tabContent.bottom(), 0, 0, tabContent.width(), 2, 32, 2);
     }
+
     public <T extends AbstractWidget> T addEntry(T entry) {
         children.add(entry);
         return entry;

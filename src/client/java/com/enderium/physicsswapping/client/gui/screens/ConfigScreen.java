@@ -6,7 +6,6 @@ import com.enderium.physicsswapping.client.gui.components.LayoutUtils;
 import com.enderium.physicsswapping.client.gui.components.PhysicsItemWidget;
 import com.enderium.physicsswapping.mixin.client.WidgetAccessor;
 import com.enderium.physicsswapping.util.Rectangle;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;

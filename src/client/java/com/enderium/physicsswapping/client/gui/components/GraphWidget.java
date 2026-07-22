@@ -21,7 +21,7 @@ public class GraphWidget extends AbstractWidget {
     private final AnimationData data;
     private final ViewType viewType;
     private final Vector2i[] points = new Vector2i[64];
-    private String max="1", mid="0.5";
+    private String max = "1", mid = "0.5";
 
     public GraphWidget(int x, int y, int width, int height, Font font, ViewType viewType, AnimationData data) {
         super(x, y, width, height, CommonComponents.EMPTY);
@@ -36,16 +36,14 @@ public class GraphWidget extends AbstractWidget {
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float a) {
         int x = getX();
         int y = getY();
-        int right=x+width;
-        int bottom=y+height;
+        int right = x + width;
+        int bottom = y + height;
         graphics.fill(x, y, right, bottom, 0x73000000);
         graphics.renderOutline(x, y, width, height, -1);
         //new Color(0x66E6E6E6, true)
         int divHeight = height >> 1;
         graphics.vLine(x + (width >> 1), y, bottom, 0x66E6E6E6);
         graphics.hLine(x, right, y + divHeight, 0x66E6E6E6);
-
-
 
 
         graphics.hLine(x, right, y + divHeight, 0x66E6E6E6);

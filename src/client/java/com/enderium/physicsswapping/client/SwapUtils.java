@@ -21,7 +21,7 @@ public class SwapUtils {
         if (changedSlots.isEmpty()) return;
         IntFunction<ItemStack> inventory = SavedInventory.getterInventory();
         changedSlots.forEach((i, stack) -> {
-            if (i == slotNum&&containerInput == ClickType.PICKUP) {
+            if (i == slotNum && containerInput == ClickType.PICKUP) {
                 SavedInventory.setItem(i, ItemStack.EMPTY);
                 GuiRenderProcessor.removeSlot(i);
                 return;

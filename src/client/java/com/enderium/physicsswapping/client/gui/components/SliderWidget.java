@@ -50,13 +50,12 @@ public class SliderWidget extends AbstractWidget {
     }
 
 
-
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float a) {
 
         int height = this.height >> 1;
         int y = getY() + height;
-        int right= getX()+width;
+        int right = getX() + width;
         boolean orFocused = isHoveredOrFocused();
 
         int lineColor = orFocused ? 0xFFCFCFCF : 0xFFB1B1B1;

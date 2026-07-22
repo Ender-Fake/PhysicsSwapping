@@ -16,7 +16,7 @@ public class AbstractContainerScreenMixin {
 
     @Inject(method = "renderSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/Slot;isFake()Z"))
     public void extractSlot(GuiGraphics guiGraphics, Slot slot, int i, int j, CallbackInfo ci) {
-        if ((Object)this instanceof CreativeModeInventoryScreen)return;
+        if ((Object) this instanceof CreativeModeInventoryScreen) return;
         GuiRenderProcessor.extractItemInSlot(slot.index, slot.getItem());
 
     }
