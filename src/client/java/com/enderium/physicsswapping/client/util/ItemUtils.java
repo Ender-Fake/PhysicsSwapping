@@ -18,7 +18,8 @@ public class ItemUtils {
         excludeTypes.addAll(List.of(
                 DataComponents.ITEM_NAME,
                 DataComponents.CUSTOM_NAME,
-                DataComponents.LORE
+                DataComponents.LORE,
+                DataComponents.DAMAGE
         ));
 
     }
