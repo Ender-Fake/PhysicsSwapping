@@ -20,7 +20,7 @@ public class SwapUtils {
         if (changedSlots.isEmpty()) return;
         IntFunction<ItemStack> inventory = SavedInventory.getterInventory();
         changedSlots.forEach((i, stack) -> {
-            if (i == slotNum) {
+            if (i == slotNum&&containerInput == ContainerInput.PICKUP) {
                 SavedInventory.setItem(i, ItemStack.EMPTY);
                 GuiRenderProcessor.removeSlot(i);
                 return;
