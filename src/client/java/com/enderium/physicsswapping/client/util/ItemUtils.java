@@ -11,7 +11,8 @@ import java.util.Set;
 public class ItemUtils {
 
     private static final Set<String> excludeTypes = new HashSet<>(List.of(
-            "display"
+            "display",
+            "Damage"
     ));
 
 
