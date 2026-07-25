@@ -4,9 +4,7 @@
 
 Physics Swapping replaces the boring vanilla item movement with dynamic, physics-based jumps. Every time you move an item between slots, it bounces, rotates, and behaves differently — no two swaps look the same.
 
----
-
-## Features
+![Features](assets/features.gif)
 
 - **Bouncy physics** — items jump with gravity and bounce decay.
 - **Randomized parameters** — each swap has unique height, bounce count, angle, and duration.
@@ -20,9 +18,11 @@ Physics Swapping replaces the boring vanilla item movement with dynamic, physics
 
 When you move an item in your inventory (Shift+click or drag), it doesn't just teleport to the new slot — it **bounces in place** right where it lands. Each bounce is unique, with random height, angle, and number of bounces.
 
+![preview](assets/preview.gif)
+
 ---
 
-## Configuration
+![Configuration](assets/configuration.gif)
 
 You can adjust the following parameters in the config menu (Mod Menu required):
 
