@@ -6,10 +6,14 @@ import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerGamePacketListener;
 import net.minecraft.network.protocol.game.ServerboundContainerClickPacket;
+import net.minecraft.world.item.crafting.Recipe;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static com.enderium.physicsswapping.client.SwapUtils.processSlot;
+import static com.enderium.physicsswapping.client.SwapUtils.startAction;
 
 @Mixin(MultiPlayerGameMode.class)
 public class MultiPlayerGameModeMixin {
@@ -29,6 +33,11 @@ public class MultiPlayerGameModeMixin {
         );
 
         return true;
+    }
+
+    @Inject(method = "handlePlaceRecipe", at = @At("HEAD"))
+    public void injectRecipePlaced(int containerId, Recipe<?> recipe, boolean useMaxItems, CallbackInfo ci) {
+        startAction();
     }
 
 }
