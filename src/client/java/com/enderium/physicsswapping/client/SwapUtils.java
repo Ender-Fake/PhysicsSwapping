@@ -14,10 +14,16 @@ public class SwapUtils {
 
     private static final Minecraft MC = Minecraft.getInstance();
 
+    private static long lastAction;
+    private static boolean isSwapToInventory;
+
     public static void processSlot(int containerId, int stateId, short slotNum, byte buttonNum, ContainerInput containerInput, Int2ObjectMap<HashedStack> changedSlots, HashedStack carriedItem) {
         if (containerInput == ContainerInput.THROW) return;
         if (containerInput == ContainerInput.CLONE) return;
         if (changedSlots.isEmpty()) return;
+        startAction();
+        if (containerInput == ContainerInput.QUICK_MOVE)
+            isSwapToInventory = !SavedInventory.checkActionInventory(slotNum);
         IntFunction<ItemStack> inventory = SavedInventory.getterInventory();
         changedSlots.forEach((i, stack) -> {
             if (i == slotNum&&containerInput == ContainerInput.PICKUP) {
@@ -40,6 +46,7 @@ public class SwapUtils {
 
     public static void onChangeSlot(int containerId, int slot, ItemStack stack) {
         if (slot < 0) return;
+        long time = System.nanoTime() - lastAction;
         if (stack.isEmpty()) {
             SavedInventory.setItem(slot, ItemStack.EMPTY);
             return;
@@ -49,8 +56,14 @@ public class SwapUtils {
             return;
         }
         SavedInventory.setCopyItem(slot, stack);
+        if (!isSwapToInventory) return;
+        else if (!SavedInventory.checkActionInventory(slot)) return;
+        if (time > 100_000_000) return;
         GuiRenderProcessor.addSlot(slot, SwapSource.SET_CLOT);
     }
 
+    public static void startAction() {
+        lastAction = System.nanoTime();
+    }
 
 }
