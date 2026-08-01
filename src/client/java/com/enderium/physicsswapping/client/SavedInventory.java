@@ -2,6 +2,7 @@ package com.enderium.physicsswapping.client;
 
 import com.enderium.physicsswapping.client.util.ItemUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 
@@ -47,6 +48,19 @@ public class SavedInventory {
         assert MC.player != null;
         AbstractContainerMenu menu = MC.player.containerMenu;
         return value -> menu.getSlot(value).getItem();
+    }
+
+    public static IntFunction<Boolean> checkActionInventory() {
+        assert MC.player != null;
+        AbstractContainerMenu menu = MC.player.containerMenu;
+        Container playerInv = MC.player.getInventory();
+        return slot -> slot >= 0 && menu.isValidSlotIndex(slot) && menu.getSlot(slot).container == playerInv;
+    }
+
+    public static boolean checkActionInventory(int slot) {
+        assert MC.player != null;
+        AbstractContainerMenu menu = MC.player.containerMenu;
+        return slot >= 0 && menu.isValidSlotIndex(slot) && menu.getSlot(slot).container == MC.player.getInventory();
     }
 
 }
