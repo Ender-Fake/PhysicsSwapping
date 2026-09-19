@@ -182,7 +182,7 @@ public class DualSliderWidget extends AbstractWidget {
 
     @Override
     protected void onDrag(MouseButtonEvent event, double dx, double dy) {
-        if (event.button() != 0) return;
+        if (!isValidClickButton(event.buttonInfo())) return;
         if (!editProgress) return;
         double value = range.value(getProgressOf(event.x()));
         if (minCloser) scrollMinValue(value);
