@@ -10,6 +10,9 @@
   "text.physicsswapping.config_menu.swap_values.angle": "Угол",
   "text.physicsswapping.config_menu.swap_values.y_offset": "Высота",
   "text.physicsswapping.config_menu.swap_values.item_scale": "Размер",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch": "Сжатие и растяжение",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.on": "Включёно",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.off": "Выключено",
   "modmenu.summaryTranslation.physicsswapping": "Прыгучая физика при перемещении предметов в инвентаре.",
   "modmenu.descriptionTranslation.physicsswapping": "Прыгучая физика при перемещении предметов в инвентаре."
 }

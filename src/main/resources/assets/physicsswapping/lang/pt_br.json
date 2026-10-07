@@ -10,6 +10,9 @@
   "text.physicsswapping.config_menu.swap_values.angle": "Ângulo",
   "text.physicsswapping.config_menu.swap_values.y_offset": "Altura",
   "text.physicsswapping.config_menu.swap_values.item_scale": "Tamanho",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch": "Achatar e esticar",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.on": "Ativado",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.off": "Desativado",
   "modmenu.summaryTranslation.physicsswapping": "Física de salto ao mover itens no inventário.",
   "modmenu.descriptionTranslation.physicsswapping": "Física de salto ao mover itens no inventário."
 }
