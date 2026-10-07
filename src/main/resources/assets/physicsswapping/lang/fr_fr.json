@@ -10,6 +10,9 @@
   "text.physicsswapping.config_menu.swap_values.angle": "Angle",
   "text.physicsswapping.config_menu.swap_values.y_offset": "Hauteur",
   "text.physicsswapping.config_menu.swap_values.item_scale": "Taille",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch": "Écrasement et étirement",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.on": "Activé",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.off": "Désactivé",
   "modmenu.summaryTranslation.physicsswapping": "Physique de saut lors du déplacement d'objets dans l'inventaire.",
   "modmenu.descriptionTranslation.physicsswapping": "Physique de saut lors du déplacement d'objets dans l'inventaire."
 }

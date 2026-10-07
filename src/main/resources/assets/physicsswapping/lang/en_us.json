@@ -10,6 +10,9 @@
   "text.physicsswapping.config_menu.swap_values.angle": "Angle",
   "text.physicsswapping.config_menu.swap_values.y_offset": "Height",
   "text.physicsswapping.config_menu.swap_values.item_scale": "Size",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch": "Squash & Stretch",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.on": "Enabled",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.off": "Disabled",
   "modmenu.summaryTranslation.physicsswapping": "Bouncy jump physics when moving items in your inventory.",
   "modmenu.descriptionTranslation.physicsswapping": "Bouncy jump physics when moving items in your inventory."
 }
