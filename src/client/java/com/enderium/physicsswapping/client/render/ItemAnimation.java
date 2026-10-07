@@ -13,6 +13,7 @@ public final class ItemAnimation {
 
     private float maxTime, yOffset, angle, itemScale = 1;
     private int bounce;
+    private boolean squashStretch;
 
     private ItemAnimation(int slot, long startTime) {
         this.slot = slot;
@@ -25,7 +26,7 @@ public final class ItemAnimation {
         yOffset = data.yOffset().getRandom(RANDOM);
         angle = data.angle().getRandom(RANDOM) * (1 - (RANDOM.nextInt(2) << 1));
         itemScale = data.itemScale().getRandom(RANDOM);
-
+        setNotRandom(data);
     }
 
     public void generateMinValues(AnimationData data) {
@@ -34,6 +35,7 @@ public final class ItemAnimation {
         yOffset = data.yOffset().min;
         angle = data.angle().min;
         itemScale = data.itemScale().min;
+        setNotRandom(data);
     }
 
     public void generateMaxValues(AnimationData data) {
@@ -42,6 +44,12 @@ public final class ItemAnimation {
         yOffset = data.yOffset().max;
         angle = data.angle().max;
         itemScale = data.itemScale().max;
+        setNotRandom(data);
+    }
+
+    public void setNotRandom(AnimationData data) {
+        squashStretch = data.squashStretch().value;
+
     }
 
     public float currentTimeOfSeconds() {
@@ -87,6 +95,10 @@ public final class ItemAnimation {
 
     public float itemScale() {
         return itemScale;
+    }
+
+    public boolean squashStretch() {
+        return squashStretch;
     }
 
     public void removeIfInvalid(long currentTime) {

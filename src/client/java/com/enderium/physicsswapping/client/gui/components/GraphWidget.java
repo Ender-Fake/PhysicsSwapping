@@ -10,7 +10,6 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.util.Mth;
-import org.joml.Vector2i;
 
 import java.text.DecimalFormat;
 
@@ -20,16 +19,14 @@ public class GraphWidget extends AbstractWidget {
     private final Font font;
     private final AnimationData data;
     private final ViewType viewType;
-    private final Vector2i[] points = new Vector2i[64];
-    private String max="1", mid="0.5";
+    private final Texture graphTexture = Texture.of("physicsswapping:graph_view", 128, 128, true);
+    private String max = "1", mid = "0.5";
 
     public GraphWidget(int x, int y, int width, int height, Font font, ViewType viewType, AnimationData data) {
         super(x, y, width, height, CommonComponents.EMPTY);
         this.font = font;
         this.data = data;
         this.viewType = viewType;
-        for (int i = 0; i < points.length; i++) points[i] = new Vector2i();
-
     }
 
     @Override
@@ -37,13 +34,14 @@ public class GraphWidget extends AbstractWidget {
         int x = getX();
         int y = getY();
         graphics.fill(x, y, getRight(), getBottom(), 0x73000000);
+
+        graphTexture.blit(graphics, x, y, getRight(), getBottom());
+
         graphics.outline(x, y, width, height, -1);
         //new Color(0x66E6E6E6, true)
         int divHeight = height >> 1;
         graphics.verticalLine(x + (width >> 1), y, getBottom(), 0x66E6E6E6);
         graphics.horizontalLine(x, getRight(), y + divHeight, 0x66E6E6E6);
-
-
 
 
         graphics.horizontalLine(x, getRight(), y + divHeight, 0x66E6E6E6);
@@ -52,12 +50,6 @@ public class GraphWidget extends AbstractWidget {
         graphics.text(font, mid, x - 2 - (font.width(mid)), y + (height >> 1) - (font.lineHeight >> 1), 0x66E6E6E6);
         graphics.text(font, "0", x - 2 - (font.width("0")), y + height - font.lineHeight, 0x66E6E6E6);
 
-        for (Vector2i pos : points) {
-            int xx = pos.x + x, yy = pos.y + y;
-            graphics.fill(xx - 1, yy - 1, xx + 1, yy + 1, 0xFF0000FF);
-
-
-        }
     }
 
     @Override
@@ -92,20 +84,25 @@ public class GraphWidget extends AbstractWidget {
 
         int width = this.width - 4;
         int height = this.height - 4;
+        float step = maxTime / 128;
 
-        float step = maxTime / 64;
-        for (int i = 0; i < 64; i++) {
+
+        int lastX = 0, lastY = 127;
+        graphTexture.clear();
+        for (int i = 1; i < 128; i++) {
             float cTime = time * scaleTime;
             time += step;
             float sinScale = (float) (Mth.floor(cTime - bounce)) * scaleFloor;
             float ping = Mth.sin(cTime * Mth.PI) * sinScale * sinScale;  // Ping pong
             float abs = Mth.abs(ping);
-            points[i].set(
-                    2 + (int) ((i / 64d) * width),
-                    2 + height - (int) (abs * height)
-            );
-        }
+            int x = i;
+            int y = 127 - (int) (abs * 127);
 
+            graphTexture.drawLine(lastX, lastY, x, y, 0xFF0000FF);
+            lastX = x;
+            lastY = y;
+        }
+        graphTexture.upload();
 
     }
 
