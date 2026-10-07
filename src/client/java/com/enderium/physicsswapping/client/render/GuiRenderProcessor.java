@@ -1,5 +1,6 @@
 package com.enderium.physicsswapping.client.render;
 
+import com.enderium.physicsswapping.client.config.PhysicsSwappingConfig;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.gui.render.state.GuiItemRenderState;
@@ -28,21 +29,51 @@ public class GuiRenderProcessor {
         float rotScale = animation.angle();
         float itemScale = animation.itemScale() - 1;
         final int bounce = animation.bounce();
+        boolean squishEnabled = animation.squashStretch();
 
+        float timeAfterBounces = 0;
+
+        //+(squishEnabled ? 0.1f : 0)
         boolean timeout = false;
-        if (time > maxTime) {
-            time = maxTime;
-            timeout = true;
+        timeOut:
+        {
+            if (time > maxTime) {
+                if (squishEnabled) {
+                    timeAfterBounces = time - maxTime;
+                    time = maxTime;
+                    if (timeAfterBounces < 0.1f) break timeOut;
+                }
+                time = maxTime;
+                timeout = true;
+            }
         }
+
 
         final float scaleTime = bounce / maxTime;
         final float scaleFloor = 1f / bounce;
         time *= scaleTime;
-        float sinScale = (float) (Mth.floor(time - bounce)) * scaleFloor;
+        int floor = Mth.floor(time - bounce);
+
+
+        float sinScale = -(float) floor * scaleFloor;
         float ping = Mth.sin(time * Mth.PI) * sinScale * sinScale;  // Ping pong
         float abs = Mth.abs(ping);
         float scaleFactor = 1 + abs * itemScale;
         pose.scaleAround(scaleFactor, x, y).translate(0, -yOffset * abs).rotateAbout(Mth.DEG_TO_RAD * ping * rotScale, x, y + 2);
+
+        if (squishEnabled) {
+            float sqA = Math.min(abs, 0.4f);
+            if (abs > 0.6f) sqA -= (abs - 0.6f);
+
+            float bX = 1;
+            if ((floor + bounce) != 0) bX += (0.1f - Math.min(abs, 0.13f)) * (0.13f - timeAfterBounces) * 10;
+            sqA *= 0.3f;
+            sqA *= 1 - Math.abs(rotScale) / 45;
+            float sqX = bX - sqA;
+            float sqY = 1 + sqA;
+            pose.scaleAround(sqX, sqY, x, y);
+        }
+
 
         return timeout;
     }
@@ -54,6 +85,7 @@ public class GuiRenderProcessor {
 
 
     public static void addSlot(int slot, SwapSource source) {
+        if (!PhysicsSwappingConfig.Values.enabled) return;
         slotsProcess.put(slot, ItemAnimation.ofConfig(slot, System.nanoTime()));
     }
 

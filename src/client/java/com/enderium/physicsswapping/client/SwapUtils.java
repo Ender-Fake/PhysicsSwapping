@@ -17,7 +17,7 @@ public class SwapUtils {
     private static final Minecraft MC = Minecraft.getInstance();
 
     private static long lastAction;
-    private static ActionContext actionContext=ActionContext.NONE;
+    private static ActionContext actionContext = ActionContext.NONE;
 
     public static void processSlot(int containerId, int stateId, short slotNum, byte buttonNum, ClickType containerInput, Int2ObjectMap<HashedStack> changedSlots, HashedStack carriedItem) {
         if (containerInput == ClickType.THROW) return;
@@ -60,7 +60,7 @@ public class SwapUtils {
             return;
         }
         SavedInventory.setCopyItem(slot, stack);
-        if (actionContext.isClick){
+        if (actionContext.isClick) {
             if (!actionContext.toInventory) return;
             else if (!SavedInventory.checkActionInventory(slot)) return;
         }
@@ -72,8 +72,8 @@ public class SwapUtils {
         lastAction = System.nanoTime();
     }
 
-    public static void setActionContext(ActionContext context){
-        actionContext=context;
+    public static void setActionContext(ActionContext context) {
+        actionContext = context;
     }
 
 }
