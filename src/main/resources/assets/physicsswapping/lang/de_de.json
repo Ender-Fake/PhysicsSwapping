@@ -10,6 +10,9 @@
   "text.physicsswapping.config_menu.swap_values.angle": "Winkel",
   "text.physicsswapping.config_menu.swap_values.y_offset": "Höhe",
   "text.physicsswapping.config_menu.swap_values.item_scale": "Größe",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch": "Stauchen & Strecken",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.on": "Aktiviert",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.off": "Deaktiviert",
   "modmenu.summaryTranslation.physicsswapping": "Hüpfphysik beim Bewegen von Gegenständen im Inventar.",
   "modmenu.descriptionTranslation.physicsswapping": "Hüpfphysik beim Bewegen von Gegenständen im Inventar."
 }

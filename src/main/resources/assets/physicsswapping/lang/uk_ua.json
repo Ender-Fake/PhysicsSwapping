@@ -10,6 +10,9 @@
   "text.physicsswapping.config_menu.swap_values.angle": "Кут",
   "text.physicsswapping.config_menu.swap_values.y_offset": "Висота",
   "text.physicsswapping.config_menu.swap_values.item_scale": "Розмір",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch": "Стиснення та розтягування",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.on": "Увімкнено",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.off": "Вимкнено",
   "modmenu.summaryTranslation.physicsswapping": "Фізика стрибків при переміщенні предметів в інвентарі.",
   "modmenu.descriptionTranslation.physicsswapping": "Фізика стрибків при переміщенні предметів в інвентарі."
 }
