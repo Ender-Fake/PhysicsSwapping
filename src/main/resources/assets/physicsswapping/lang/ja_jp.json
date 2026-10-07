@@ -10,6 +10,9 @@
   "text.physicsswapping.config_menu.swap_values.angle": "角度",
   "text.physicsswapping.config_menu.swap_values.y_offset": "高さ",
   "text.physicsswapping.config_menu.swap_values.item_scale": "サイズ",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch": "スカッシュ＆ストレッチ",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.on": "オン",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.off": "オフ",
   "modmenu.summaryTranslation.physicsswapping": "インベントリ内でのアイテム移動時にバウンス物理を追加します。",
   "modmenu.descriptionTranslation.physicsswapping": "インベントリ内でのアイテム移動時にバウンス物理を追加します。"
 }

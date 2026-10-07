@@ -10,6 +10,9 @@
   "text.physicsswapping.config_menu.swap_values.angle": "각도",
   "text.physicsswapping.config_menu.swap_values.y_offset": "높이",
   "text.physicsswapping.config_menu.swap_values.item_scale": "크기",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch": "스쿼시 & 스트레치",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.on": "활성화",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.off": "비활성화",
   "modmenu.summaryTranslation.physicsswapping": "인벤토리에서 아이템을 이동할 때 바운스 물리 효과를 추가합니다.",
   "modmenu.descriptionTranslation.physicsswapping": "인벤토리에서 아이템을 이동할 때 바운스 물리 효과를 추가합니다."
 }

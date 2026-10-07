@@ -10,6 +10,9 @@
   "text.physicsswapping.config_menu.swap_values.angle": "角度",
   "text.physicsswapping.config_menu.swap_values.y_offset": "高度",
   "text.physicsswapping.config_menu.swap_values.item_scale": "大小",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch": "挤压与拉伸",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.on": "已启用",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.off": "已禁用",
   "modmenu.summaryTranslation.physicsswapping": "在背包中移动物品时的弹跳物理。",
   "modmenu.descriptionTranslation.physicsswapping": "在背包中移动物品时的弹跳物理。"
 }
