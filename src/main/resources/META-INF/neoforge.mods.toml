@@ -1,0 +1,27 @@
+license = "MIT"
+
+modLoader="javafml"
+loaderVersion="[1,)"
+
+[[mods]]
+modId = "${id}"
+displayName = "${name}"
+version = "${version}"
+authors = "Ender_Fake"
+description = "Bouncy jump physics when moving items in your inventory"
+
+iconFile = "assets/physicsswapping/icon.png"
+logoFile = "assets/physicsswapping/icon.png"
+
+displayURL = "https://github.com/Ender-Fake/PhysicsSwapping/"
+issueTrackerURL = "https://github.com/Ender-Fake/PhysicsSwapping/issues"
+
+[[mixins]]
+config = "physicsswapping.mixins.json"
+
+[[dependencies.${id}]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft}"
+ordering = "NONE"
+side = "BOTH"
