@@ -121,12 +121,14 @@ tasks {
         // loomx.mod(Sources)Jar returns the jar task for the applied loom variant
         from(loomx.modJar.flatMap { it.archiveFile }, loomx.modSourcesJar.flatMap { it.archiveFile })
         into(rootProject.layout.buildDirectory.file("libs/${project.property("mod.version")}"))
+
+
     }
 
-    withType<Jar>().configureEach {
+/*    withType<Jar>().configureEach {
         destinationDirectory.set(
             rootProject.layout.projectDirectory.dir("buildVersions/${project.property("mod.version")}")
         )
-    }
+    }*/
 
 }

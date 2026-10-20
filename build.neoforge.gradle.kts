@@ -106,10 +106,10 @@ tasks {
         into(rootProject.layout.buildDirectory.file("libs/${project.property("mod.version")}"))
     }
 
-    withType<Jar>().configureEach {
+/*    withType<Jar>().configureEach {
         destinationDirectory.set(
             rootProject.layout.projectDirectory.dir("buildVersions/${project.property("mod.version")}")
         )
-    }
+    }*/
 
 }
