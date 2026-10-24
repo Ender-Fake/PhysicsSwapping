@@ -1,24 +1,18 @@
 package com.enderium.physicsswapping.client.gui.components;
 
-//~ gui_graphics
 import com.enderium.physicsswapping.client.config.data.AbstractRange;
 import com.enderium.physicsswapping.client.config.data.DualFloatRange;
 import com.enderium.physicsswapping.client.config.data.DualIntRange;
 import com.enderium.physicsswapping.client.gui.components.range.NumberRange;
+import com.enderium.physicsswapping.client.render.GuiRenderer;
 import com.enderium.physicsswapping.client.util.ComponentUtils;
 import com.enderium.physicsswapping.util.EventManager;
 import com.enderium.physicsswapping.util.Mth;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.narration.NarrationElementOutput;
-//? if >=1.21.11
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 
-import static com.enderium.physicsswapping.client.util.GuiUtils.*;
-
-public class DualSliderWidget extends AbstractWidget implements DefaultLayout {
+public class DualSliderWidget extends MultiWidget {
 
     public static final Component SEPARATOR = Component.literal("-");
     public static final Component EQUAL = Component.literal("=");
@@ -94,12 +88,8 @@ public class DualSliderWidget extends AbstractWidget implements DefaultLayout {
     }
 
     @Override
-    //? if >=26.1 {
-    protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
-     //?} else
-    //protected void renderWidget(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+    public void widgetRender(GuiRenderer graphics, double mouseX, double mouseY) {
         //graphics.outline(getX(), getY(), width, height, 0x6FB1B1B1);
-
 
         int height = this.height >> 1;
         int y = getY() + height;
@@ -108,8 +98,8 @@ public class DualSliderWidget extends AbstractWidget implements DefaultLayout {
 
         OverType onProgress = isOverProgressX(mouseX);
 
-        gCenteredText(graphics, font, "⟳", x + 10, y - lineCenter, (isHovered && onProgress == OverType.LEFT) ? -1 : 0x6FB1B1B1);
-        gCenteredText(graphics, font, "⟳", x + width - 10, y - lineCenter, (isHovered && onProgress == OverType.RIGHT) ? -1 : 0x6FB1B1B1);
+        graphics.textCentered(font, "⟳", x + 10, y - lineCenter, (isHovered && onProgress == OverType.LEFT) ? -1 : 0x6FB1B1B1);
+        graphics.textCentered(font, "⟳", x + width - 10, y - lineCenter, (isHovered && onProgress == OverType.RIGHT) ? -1 : 0x6FB1B1B1);
 
         int width = this.width - 40;
         x += 20;
@@ -127,49 +117,45 @@ public class DualSliderWidget extends AbstractWidget implements DefaultLayout {
         }
 
 
-        gHorizontalLine(graphics,x, x + width, y, lineColor);
-        gVerticalLine(graphics, x, y - 4, y + 4, lineColor);
-        gVerticalLine(graphics, x + width, y - 4, y + 4, lineColor);
-        gVerticalLine(graphics, x + (width >> 1), y - 2, y + 2, lineColor);
+        graphics.horizontalLine(x, x + width, y, lineColor);
+        graphics.verticalLine(x, y - 4, y + 4, lineColor);
+        graphics.verticalLine(x + width, y - 4, y + 4, lineColor);
+        graphics.verticalLine(x + (width >> 1), y - 2, y + 2, lineColor);
 
         int xP;
         xP = x + (int) (width * scrollMinProgress());
 
-        gFill(graphics, xP - 1, y - 5, xP + 1, y + 5, progressColor);
+        graphics.fill(xP - 1, y - 5, xP + 1, y + 5, progressColor);
 
         xP = x + (int) (width * scrollMaxProgress());
 
-        gFill(graphics,xP - 1, y - 5, xP + 1, y + 5, progressColor);
+        graphics.fill(xP - 1, y - 5, xP + 1, y + 5, progressColor);
 
 
         extractText(graphics, x, y, width, orFocused);
 
-
     }
 
-    private void extractText(GuiGraphicsExtractor graphics, int x, int y, int width, boolean orFocused) {
+    private void extractText(GuiRenderer graphics, int x, int y, int width, boolean orFocused) {
 
         y += 8;
         int xP = x + (width >> 1);
         Component separator = minValue == maxValue ? EQUAL : SEPARATOR;
 
-        gCenteredText(graphics, font, separator, xP, y, -1);
-        gText(graphics, font, cacheMinAmount, x, y, orFocused ? 0xFFFFFFFF : 0xFFB1B1B1);
-        gLeftText(graphics, font, cacheMaxAmount,x + width, y, orFocused ? 0xFFFFFFFF : 0xFFB1B1B1);
+        graphics.textCentered(font, separator, xP, y, -1);
+        graphics.text(font, cacheMinAmount, x, y, orFocused ? 0xFFFFFFFF : 0xFFB1B1B1);
+        graphics.textLeft(font, cacheMaxAmount,x + width, y, orFocused ? 0xFFFFFFFF : 0xFFB1B1B1);
 
-        gCenteredText(graphics, font, change ? cacheTitleChanged : (orFocused ? cacheTitleHover : cacheTitle),  xP, getY(), -1);
+        graphics.textCentered(font, change ? cacheTitleChanged : (orFocused ? cacheTitleHover : cacheTitle),  xP, getY(), -1);
 
     }
 
 
     @Override
-    //? if >=1.21.1 {
-    public boolean mouseScrolled(double mx, double my, double scrollX, double scrollY) {
-     //?} else
-    //public boolean mouseScrolled(double mx, double my, double scrollY) {
+    public boolean scroll(double mouseX, double mouseY, double scrollX, double scrollY) {
         if (!this.visible) return false;
         double floor = Math.round(scrollY);
-        if (isMinCloser(getProgressOf(mx))) {
+        if (isMinCloser(getProgressOf(mouseX))) {
             this.scrollMin(-floor * step);
         } else this.scrollMax(-floor * step);
         change();
@@ -177,57 +163,37 @@ public class DualSliderWidget extends AbstractWidget implements DefaultLayout {
     }
 
     @Override
-            //? if >=1.21.11 {
-    public void onClick(MouseButtonEvent event, boolean doubleClick) {
-        double mX = event.x(), mY=event.y();
-    //?} else {
-    /*public void onClick(double mouseX, double mouseY) {
-        double mX = mouseX, mY=mouseY;
-        *///?}
-        if (isOverProgressX(mX).isOver()) editProgress = true;
+    public boolean click(double mouseX, double mouseY, int button) {
+        if (isOverProgressX(mouseX).isOver()) editProgress = true;
         else {
-            if (mX < (getX() + 20)) onClickReset.fire(false);
-            else if (mX > (getRight() - 20)) onClickReset.fire(true);
+            if (mouseX < (getX() + 20)) onClickReset.fire(false);
+            else if (mouseX > (getRight() - 20)) onClickReset.fire(true);
 
         }
-        minCloser = isMinCloser(getProgressOf(mX));
+        minCloser = isMinCloser(getProgressOf(mouseX));
+        return true;
     }
 
     @Override
-    //? if >=1.21.11 {
-    protected void onDrag(MouseButtonEvent event, double dx, double dy) {
-        double mX = event.x();
-        double mY = event.y();
-        if (!isValidClickButton(event.buttonInfo())) return;
-    //?} else {
-    /*protected void onDrag(double mouseX, double mouseY, double dx, double dy) {
-        double mX = mouseX;
-        double mY = mouseY;
-    *///?}
-        if (!editProgress) return;
-        double value = range.value(getProgressOf(mX));
+    public boolean drag(double mouseX, double mouseY, int button, double dX, double dY) {
+        if (button!= InputConstants.MOUSE_BUTTON_LEFT) return false;
+        if (!editProgress) return false;
+        double value = range.value(getProgressOf(mouseX));
         if (minCloser) scrollMinValue(value);
         else scrollMaxValue(value);
-
-
+        return true;
     }
 
+
     @Override
-    //? if >=1.21.11 {
-    public void onRelease(MouseButtonEvent event) {
-    //?} else
-    //public void onRelease(double mouseX, double mouseY) {
+    public boolean release(double mouseX, double mouseY, int button) {
         if (editProgress) {
             editProgress = false;
             change();
         }
-
+        return true;
     }
 
-    @Override
-    protected void updateWidgetNarration(NarrationElementOutput output) {
-
-    }
 
     public void setColor(int color, int colorHover, int colorChanged) {
         cacheTitle = ComponentUtils.withColor(getMessage().copy(),color);
@@ -308,4 +274,3 @@ public class DualSliderWidget extends AbstractWidget implements DefaultLayout {
     }
 
 }
-//~ !gui_graphics

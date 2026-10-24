@@ -92,16 +92,16 @@ public class AbstractContainerScreenMixin {
 
 
     //? if >=26.1 {
-    /^@Inject(method = "renderSlotContents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;itemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V"))
+    @Inject(method = "renderSlotContents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;itemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V"))
     private void clear(GuiGraphicsExtractor guiGraphics, ItemStack itemstack, Slot slot, String countString, CallbackInfo ci) {
         RenderContext.clearValues();
     }
-    ^///?} else {
-    @Inject(method = "renderSlotContents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;renderItemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V"))
+    //?} else {
+    /^@Inject(method = "renderSlotContents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;renderItemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V"))
     private void clear(GuiGraphicsExtractor guiGraphics, ItemStack itemstack, Slot slot, String countString, CallbackInfo ci) {
         RenderContext.clearValues();
     }
-    //?}
+    ^///?}
 
 
 

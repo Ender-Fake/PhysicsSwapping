@@ -2,22 +2,17 @@ package com.enderium.physicsswapping.client.gui.components;
 
 //~ gui_graphics
 
+import com.enderium.physicsswapping.client.render.GuiRenderer;
 import com.enderium.physicsswapping.client.util.ComponentUtils;
 import com.enderium.physicsswapping.util.EventManager;
 import it.unimi.dsi.fastutil.booleans.Boolean2ObjectFunction;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-//? if >=1.21.11
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 
 import java.awt.*;
 
-import static com.enderium.physicsswapping.client.util.GuiUtils.*;
-
-public class CheckBoxWidget extends AbstractWidget implements DefaultLayout {
+public class CheckBoxWidget extends MultiWidget {
 
     private final EventManager<CheckBoxWidget, Boolean> onChange = new EventManager<>(this);
     private final EventManager<CheckBoxWidget, Boolean> onClickReset = new EventManager<>(this);
@@ -48,11 +43,9 @@ public class CheckBoxWidget extends AbstractWidget implements DefaultLayout {
 
 
     @Override
-    //? if >=26.1 {
-    protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
-     //?} else
-    //protected void renderWidget(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
-//        graphics.outline(getX(), getY(), width, height, 0x6FB1B1B1);
+    public void widgetRender(GuiRenderer graphics, double mouseX, double mouseY) {
+        //graphics.outline(getX(), getY(), width, height, 0x6FB1B1B1);
+
 
         int wC = this.width >> 1;
         int hC = this.height >> 1;
@@ -70,61 +63,51 @@ public class CheckBoxWidget extends AbstractWidget implements DefaultLayout {
         int valueColor = value ? (valueHover ? GREEN_MOD_COLOR : GREEN_OFF_MOD_COLOR) : (valueHover ? RED_MOD_COLOR : RED_OFF_MOD_COLOR);
 
 
-        gCenteredText(graphics, font, "⟳", x + wC, getBottom() - 9, resetHover ? -1 : 0x6FB1B1B1);
+        graphics.textCentered(font, "⟳", x + wC, getBottom() - 9, resetHover ? -1 : 0x6FB1B1B1);
 
 
         int wValueText = font.width(cacheValueText) + 20;
-        gFill(graphics,x + wC - (wValueText >> 1), yC - 10, x + wC - (wValueText >> 1) + wValueText, yC + 10, 0x4f_000000);
-        gOutline(graphics,x + wC - (wValueText >> 1), yC - 10, wValueText, 20, valueColor);
+        graphics.fill(x + wC - (wValueText >> 1), yC - 10, x + wC - (wValueText >> 1) + wValueText, yC + 10, 0x4f_000000);
+        graphics.outline(x + wC - (wValueText >> 1), yC - 10, wValueText, 20, valueColor);
 
         x += 20;
 
 
         int xP = x + (wRD >> 1);
 
-        gCenteredText(graphics,font,dirty ? cacheTitleChanged : (orFocused ? cacheTitleHover : cacheTitle), xP, getY(), -1);
-        gCenteredText(graphics,font,ComponentUtils.withColor(cacheValueText.copy(), valueColor), xP, getY() + hC - 4, -1);
-
+        graphics.textCentered(font,dirty ? cacheTitleChanged : (orFocused ? cacheTitleHover : cacheTitle), xP, getY(), -1);
+        graphics.textCentered(font,ComponentUtils.withColor(cacheValueText.copy(), valueColor), xP, getY() + hC - 4, -1);
     }
 
     @Override
-    //? if >=1.21.11 {
-    public void onClick(MouseButtonEvent event, boolean doubleClick) {
-        double mX = event.x(), mY=event.y();
-    //?} else {
-    /*public void onClick(double mouseX, double mouseY) {
-        double mX = mouseX, mY=mouseY;
-    *///?}
+    public boolean click(double mouseX, double mouseY, int button) {
 
         int wC = this.width >> 1;
         int hC = this.height >> 1;
         int yC = getY() + hC;
         int x = getX();
 
-        if (isOver(mX, mY, x + 10, yC - 10, width - 20, 20)) {
+        if (isOver(mouseX, mouseY, x + 10, yC - 10, width - 20, 20)) {
             value(!value());
             change();
+            return true;
         }
 
-        if (isOver(mX, mY, x + wC - 5, getY() + height - 10, 10, 10)) {
+        if (isOver(mouseX, mouseY, x + wC - 5, getY() + height - 10, 10, 10)) {
             onClickReset.fire(value);
+            return true;
         }
 
-
+        return false;
     }
 
-
-
     @Override
-    //? if >=1.21.11 {
-    public void onRelease(MouseButtonEvent event) {
-    //?} else
-    //public void onRelease(double mouseX, double mouseY) {
+    public boolean release(double mouseX, double mouseY, int button) {
         if (editProgress) {
             editProgress = false;
             change();
         }
-
+        return false;
     }
 
     @Override

@@ -1,20 +1,15 @@
 package com.enderium.physicsswapping.client.gui.components;
 
-//~ gui_graphics
-import com.enderium.physicsswapping.client.gui.components.range.NumberRange;
-import com.enderium.physicsswapping.util.EventManager;
-import static com.enderium.physicsswapping.client.util.GuiUtils.*;
 
+import com.enderium.physicsswapping.client.gui.components.range.NumberRange;
+import com.enderium.physicsswapping.client.render.GuiRenderer;
+import com.enderium.physicsswapping.util.EventManager;
 import com.enderium.physicsswapping.util.Mth;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.narration.NarrationElementOutput;
-//? if >=1.21.11
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 
-public class SliderWidget extends AbstractWidget implements DefaultLayout {
+public class SliderWidget extends MultiWidget {
 
     private final EventManager<SliderWidget, Double> onChange = new EventManager<>(this);
     private final Font font;
@@ -55,36 +50,29 @@ public class SliderWidget extends AbstractWidget implements DefaultLayout {
 
 
     @Override
-    //? if >=26.1 {
-    protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
-     //?} else
-    //protected void renderWidget(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
-
+    public void widgetRender(GuiRenderer graphics, double mouseX, double mouseY) {
         int height = this.height >> 1;
         int y = getY() + height;
         boolean orFocused = isHoveredOrFocused();
 
         int lineColor = orFocused ? 0xFFCFCFCF : 0xFFB1B1B1;
 
-        gHorizontalLine(graphics, getX(), getRight(), y, lineColor);
-        gVerticalLine(graphics, getX(), y - 4, y + 4, lineColor);
-        gVerticalLine(graphics, getRight(), y - 4, y + 4, lineColor);
-        gVerticalLine(graphics, getX() + (width >> 1), y - 2, y + 2, lineColor);
+        graphics.horizontalLine(getX(), getRight(), y, lineColor);
+        graphics.verticalLine(getX(), y - 4, y + 4, lineColor);
+        graphics.verticalLine(getRight(), y - 4, y + 4, lineColor);
+        graphics.verticalLine(getX() + (width >> 1), y - 2, y + 2, lineColor);
 
         int x = getX() + (int) (width * progress());
 
-        gFill(graphics,x - 1, y - 5, x + 1, y + 5, orFocused ? 0xFFFFFFFF : 0xFFDDDDDD);
+        graphics.fill(x - 1, y - 5, x + 1, y + 5, orFocused ? 0xFFFFFFFF : 0xFFDDDDDD);
 
         int xOffset = progress < 0 ? font.width("-") : 0;
 
-        gCenteredText(graphics, font, cacheAmount, getX() + (width >> 1) + xOffset, y + 8, orFocused ? 0xFFFFFFFF : 0xFFB1B1B1);
+        graphics.textCentered(font, cacheAmount, getX() + (width >> 1) + xOffset, y + 8, orFocused ? 0xFFFFFFFF : 0xFFB1B1B1);
     }
 
     @Override
-    //? if >=1.21.1 {
-    public boolean mouseScrolled(double mx, double my, double scrollX, double scrollY) {
-     //?} else
-    //public boolean mouseScrolled(double mx, double my, double scrollY) {
+    public boolean scroll(double mouseX, double mouseY, double scrollX, double scrollY) {
         if (!this.visible) return false;
         this.scroll(-scrollY * 0.01f);
         change();
@@ -92,33 +80,18 @@ public class SliderWidget extends AbstractWidget implements DefaultLayout {
     }
 
     @Override
-    //? if >=1.21.11 {
-    protected void onDrag(MouseButtonEvent event, double dx, double dy) {
-        double mX = event.x();
-        double mY = event.y();
-        if (!isValidClickButton(event.buttonInfo())) return;
-    //?} else {
-    /*protected void onDrag(double mouseX, double mouseY, double dx, double dy) {
-        double mX = mouseX;
-        double mY = mouseY;
-        *///?}
-        if (mX < getX()) progress(0);
-        else if (mX > getRight()) progress(1);
-        else progress((mX - getX()) / width);
-
+    public boolean drag(double mouseX, double mouseY, int button, double dX, double dY) {
+        if (button != InputConstants.MOUSE_BUTTON_LEFT) return false;
+        if (mouseX < getX()) progress(0);
+        else if (mouseX > getRight()) progress(1);
+        else progress((mouseX - getX()) / width);
+        return true;
     }
 
     @Override
-    //? if >=1.21.11 {
-    public void onRelease(MouseButtonEvent event) {
-     //?} else
-    //public void onRelease(double mouseX, double mouseY) {
+    public boolean release(double mouseX, double mouseY, int button) {
         change();
-    }
-
-    @Override
-    protected void updateWidgetNarration(NarrationElementOutput output) {
-
+        return true;
     }
 
     public void change() {
