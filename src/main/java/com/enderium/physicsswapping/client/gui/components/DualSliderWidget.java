@@ -98,8 +98,12 @@ public class DualSliderWidget extends MultiWidget {
 
         OverType onProgress = isOverProgressX(mouseX);
 
-        graphics.textCentered(font, "⟳", x + 10, y - lineCenter, (isHovered && onProgress == OverType.LEFT) ? -1 : 0x6FB1B1B1);
-        graphics.textCentered(font, "⟳", x + width - 10, y - lineCenter, (isHovered && onProgress == OverType.RIGHT) ? -1 : 0x6FB1B1B1);
+        int resetLeftColor = active ? (isHovered && onProgress == OverType.LEFT) ? -1 : 0x6FB1B1B1 : 0x6F5E5E5E;
+        int resetRightColor = active ? (isHovered && onProgress == OverType.RIGHT) ? -1 : 0x6FB1B1B1 : 0x6F5E5E5E;
+
+
+        graphics.textCentered(font, "⟳", x + 10, y - lineCenter, resetLeftColor);
+        graphics.textCentered(font, "⟳", x + width - 10, y - lineCenter, resetRightColor);
 
         int width = this.width - 40;
         x += 20;
@@ -154,6 +158,7 @@ public class DualSliderWidget extends MultiWidget {
     @Override
     public boolean scroll(double mouseX, double mouseY, double scrollX, double scrollY) {
         if (!this.visible) return false;
+        if (!isOverLayout(mouseX,mouseY))return false;
         double floor = Math.round(scrollY);
         if (isMinCloser(getProgressOf(mouseX))) {
             this.scrollMin(-floor * step);
@@ -164,6 +169,7 @@ public class DualSliderWidget extends MultiWidget {
 
     @Override
     public boolean click(double mouseX, double mouseY, int button) {
+        if (!isOverLayout(mouseX,mouseY))return false;
         if (isOverProgressX(mouseX).isOver()) editProgress = true;
         else {
             if (mouseX < (getX() + 20)) onClickReset.fire(false);
@@ -190,8 +196,9 @@ public class DualSliderWidget extends MultiWidget {
         if (editProgress) {
             editProgress = false;
             change();
+            return true;
         }
-        return true;
+        return false;
     }
 
 
@@ -253,19 +260,19 @@ public class DualSliderWidget extends MultiWidget {
 
     public record DualProgress(double min, double max) {
 
-        public DualFloatRange set(DualFloatRange range) {
+        public DualFloatRange setTo(DualFloatRange range) {
             range.min = (float) min;
             range.max = (float) max;
             return range;
         }
 
-        public DualIntRange set(DualIntRange range) {
+        public DualIntRange setTo(DualIntRange range) {
             range.min = (int) min;
             range.max = (int) max;
             return range;
         }
 
-        public <T extends AbstractRange> T set(T range) {
+        public <T extends AbstractRange> T setTo(T range) {
             range.setMin(min);
             range.setMax(max);
             return range;

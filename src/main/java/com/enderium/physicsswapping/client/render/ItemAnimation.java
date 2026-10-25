@@ -14,6 +14,8 @@ public final class ItemAnimation {
     private float maxTime, yOffset, angle, itemScale = 1;
     private int bounce;
     private boolean squashStretch;
+    private float squashStretchX;
+    private float squashStretchY;
 
     private ItemAnimation(int slot, long startTime) {
         this.slot = slot;
@@ -49,6 +51,8 @@ public final class ItemAnimation {
 
     public void setNotRandom(AnimationData data) {
         squashStretch = data.squashStretch().value;
+        squashStretchX = data.squashStretchX().value;
+        squashStretchY = data.squashStretchY().value;
 
     }
 
@@ -98,6 +102,14 @@ public final class ItemAnimation {
 
     public boolean squashStretch() {
         return squashStretch;
+    }
+
+    public float squashStretchX() {
+        return squashStretchX;
+    }
+
+    public float squashStretchY() {
+        return squashStretchY;
     }
 
     public void removeIfInvalid(long currentTime) {

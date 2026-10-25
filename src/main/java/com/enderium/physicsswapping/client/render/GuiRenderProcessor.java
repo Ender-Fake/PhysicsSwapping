@@ -90,7 +90,9 @@ public class GuiRenderProcessor {
 
 
         float sinScale = -(float) floor * scaleFloor;
-        float ping = Mth.sin(time * Mth.PI) * sinScale * sinScale;  // Ping pong
+        float vScale=sinScale*sinScale;
+
+        float ping = Mth.sin(time * Mth.PI) * vScale;  // Ping pong
         float abs = Mth.abs(ping);
         float scaleFactor = 1 + abs * itemScale;
         //? if >=1.21.11 {
@@ -101,15 +103,21 @@ public class GuiRenderProcessor {
         //pose.mulPoseMatrix(new Matrix4f().translate(0, -yOffset * abs, 0).scaleAround(scaleFactor, scaleFactor, 1, x, y, 0).rotateAround(new Quaternionf().rotationZ(Mth.DEG_TO_RAD * ping * rotScale), x, y + 2, 0));
 
         if (squishEnabled) {
-            float sqA = Math.min(abs, 0.4f);
-            if (abs > 0.6f) sqA -= (abs - 0.6f);
+            float low = 0;
+            if ((floor + bounce) != 0){
+                low = 1 - (Math.min(abs, 0.3f)*3.3333333f);
+                low*=(1-timeAfterBounces*10);
+            }
 
-            float bX = 1;
-            if ((floor + bounce) != 0) bX += (0.1f - Math.min(abs, 0.13f)) * (0.13f - timeAfterBounces) * 10;
-            sqA *= 0.3f;
-            sqA *= 1 - Math.abs(rotScale) / 45;
-            float sqX = bX - sqA;
-            float sqY = 1 + sqA;
+
+            float upper =  (Math.max(abs, 0.6f)-0.6f)*1.6666666f;
+            float mid = (Mth.clamp(abs,0.3f, 0.6f)-0.3f)*2.5f  - upper;
+
+            float squshScaleX=animation.squashStretchX()*vScale;
+            float squshScaleY=animation.squashStretchY()*vScale;
+
+            float sqX=1 +low*squshScaleX - mid*squshScaleX;
+            float sqY=1 -low*squshScaleY + mid*squshScaleY;
             //? if >=1.21.11 {
             pose.scaleAround(sqX, sqY, x, y);
             //?} elif >=1.21.1 {

@@ -11,6 +11,7 @@ import com.enderium.physicsswapping.client.config.data.AbstractRange;
 import com.enderium.physicsswapping.client.config.data.DualFloatRange;
 import com.enderium.physicsswapping.client.config.data.DualIntRange;
 import com.enderium.physicsswapping.client.config.data.ref.BooleanRef;
+import com.enderium.physicsswapping.client.config.data.ref.FloatRef;
 import com.enderium.physicsswapping.client.gui.components.range.NumberRange;
 import com.enderium.physicsswapping.client.render.AnimationData;
 import com.enderium.physicsswapping.util.EventManager;
@@ -66,6 +67,8 @@ public class ConfigSectionWidget extends AbstractWidget implements ContainerEven
     public final DualFloatRange angle = new DualFloatRange(Values.angle);
     public final DualFloatRange itemScale = new DualFloatRange(Values.itemScale);
     public final BooleanRef squashStretch = new BooleanRef(Values.squashStretch.value);
+    public final FloatRef squashStretchX = new FloatRef(Values.squashStretchX.value);
+    public final FloatRef squashStretchY = new FloatRef(Values.squashStretchY.value);
 
     public final AnimationData data = new AnimationData(
             duration,
@@ -73,7 +76,9 @@ public class ConfigSectionWidget extends AbstractWidget implements ContainerEven
             yOffset,
             angle,
             itemScale,
-            squashStretch
+            squashStretch,
+            squashStretchX,
+            squashStretchY
     );
 
     public ConfigSectionWidget(Minecraft minecraft, int width, int height, int offsetY, Runnable closeMenu, DirtyChecker dataChecker) {
@@ -152,22 +157,44 @@ public class ConfigSectionWidget extends AbstractWidget implements ContainerEven
         };
 
         CheckBoxWidget squish = addEntry(new CheckBoxWidget(x, 0, w, 50, ConfigText.SQUASH_STRETCH.get(), font, isTrue -> (isTrue ? ConfigText.SQUASH_STRETCH_ON : ConfigText.SQUASH_STRETCH_OFF).get()));
+
+
+
+        SliderWidget ssX= addEntry(new SliderWidget(x,0,w,50,ConfigText.SQUASH_STRETCH_X.get(),font,NumberRange.of(Limits.SQUASH_STRETCH_X_LIMIT,2),0.1f));
+        SliderWidget ssY= addEntry(new SliderWidget(x,0,w,50,ConfigText.SQUASH_STRETCH_Y.get(),font,NumberRange.of(Limits.SQUASH_STRETCH_Y_LIMIT,2),0.1f));
+
+        //init data
+
         squish.initValue(Values.squashStretch.value);
         squish.value(Values.squashStretch.value);
         squish.onClickReset().subscribe((widget, aBoolean) -> {
             widget.value(Defaults.SQUASH_STRETCH_VALUE.value);
             widget.change();
         });
-        squish.onChange().subscribe((widget, aBoolean) -> {
-            squashStretch.value = aBoolean;
+        squish.onChange().subscribe((widget, retValue) -> {
+            squashStretch.value = retValue;
             onChange();
+
+            ssX.setAndUpdateActive(squish.value());
+            ssY.setAndUpdateActive(squish.value());
         });
+
+
+        ssX.setAndUpdateActive(squish.value());
+        ssY.setAndUpdateActive(squish.value());
+
+
+
+        initSlider(ssX, squashStretchX, Values.squashStretchX, Defaults.SQUASH_STRETCH_X_VALUE);
+        initSlider(ssY, squashStretchY, Values.squashStretchY, Defaults.SQUASH_STRETCH_Y_VALUE);
+
 
         initSlider(widgets[0], duration, Values.duration, Defaults.DURATION_VALUE);
         initSlider(widgets[1], bounce, Values.bounce, Defaults.BOUNCE_VALUE);
         initSlider(widgets[2], yOffset, Values.yOffset, Defaults.Y_OFFSET_VALUE);
         initSlider(widgets[3], angle, Values.angle, Defaults.ANGLE_VALUE);
         initSlider(widgets[4], itemScale, Values.itemScale, Defaults.ITEM_SCALE_VALUE);
+
 
         calcContent();
     }
@@ -195,7 +222,7 @@ public class ConfigSectionWidget extends AbstractWidget implements ContainerEven
 
     private DualSliderWidget initSlider(DualSliderWidget widget, AbstractRange local, AbstractRange global, AbstractRange defaultRange) {
         widget.setValue(local.minDouble(), local.maxDouble());
-        widget.onChange().subscribe((self, progress) -> self.setChange(!progress.set(local).equals(global)));
+        widget.onChange().subscribe((self, progress) -> self.setChange(!progress.setTo(local).equals(global)));
         widget.onClickReset().subscribe((self, isRight) -> {
             if (isRight) local.setMax(defaultRange.maxDouble());
             else local.setMin(defaultRange.minDouble());
@@ -208,8 +235,30 @@ public class ConfigSectionWidget extends AbstractWidget implements ContainerEven
         return widget;
     }
 
+    private SliderWidget initSlider(SliderWidget widget, FloatRef local, FloatRef global, FloatRef defaultValue) {
+        widget.setValue(local.value);
+        widget.onChange().subscribe((self, progress) -> {
+            local.value=progress.floatValue();
+            self.setChange(!local.equals(global));
+        });
+        widget.onClickReset().subscribe((self, b) -> {
+            local.value=defaultValue.value;
+            self.setValue(defaultValue.value);
+            self.change();
+        });
+
+        widget.onChange().subscribe((s, p) -> onChange());
+
+        return widget;
+    }
+
     public boolean isDataDirty() {
-        return !(duration.equals(Values.duration) && bounce.equals(Values.bounce) && yOffset.equals(Values.yOffset) && angle.equals(Values.angle) && itemScale.equals(Values.itemScale) && squashStretch.equals(Values.squashStretch));
+        return !(
+                duration.equals(Values.duration) && bounce.equals(Values.bounce)
+                        && yOffset.equals(Values.yOffset) && angle.equals(Values.angle)
+                        && itemScale.equals(Values.itemScale) && squashStretch.equals(Values.squashStretch)
+                        && squashStretchX.equals(Values.squashStretchX) && squashStretchY.equals(Values.squashStretchY)
+        );
     }
 
     public void onChange() {
@@ -260,15 +309,10 @@ public class ConfigSectionWidget extends AbstractWidget implements ContainerEven
     }
 
     private void drawTabsShades(GuiGraphicsExtractor graphics) {
-        //? if >=1.21.1 {
-        gBlit(graphics, Screen.HEADER_SEPARATOR, tabContent.x(), tabContent.y(), tabContent.right(), tabContent.y()+1,0,1,0,1);
-        gBlit(graphics, Screen.FOOTER_SEPARATOR, tabContent.x(), tabContent.bottom(), tabContent.right(), tabContent.bottom()-1, 0,1,0,1);
-        //?} else {
-        /*gHorizontalLine(graphics, tabContent.x(), tabContent.right(), tabContent.y(), 0x33FFFFFF);
+        gHorizontalLine(graphics, tabContent.x(), tabContent.right(), tabContent.y(), 0x33FFFFFF);
         gHorizontalLine(graphics, tabContent.x(), tabContent.right(), tabContent.y() + 1, 0xBF000000);
         gHorizontalLine(graphics, tabContent.x(), tabContent.right(), tabContent.bottom(), 0xBF000000);
         gHorizontalLine(graphics, tabContent.x(), tabContent.right(), tabContent.bottom() + 1, 0x33FFFFFF);
-        *///?}
 
     }
 

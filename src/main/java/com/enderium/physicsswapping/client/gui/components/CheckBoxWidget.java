@@ -81,7 +81,7 @@ public class CheckBoxWidget extends MultiWidget {
 
     @Override
     public boolean click(double mouseX, double mouseY, int button) {
-
+        if (!isOverLayout(mouseX,mouseY))return false;
         int wC = this.width >> 1;
         int hC = this.height >> 1;
         int yC = getY() + hC;

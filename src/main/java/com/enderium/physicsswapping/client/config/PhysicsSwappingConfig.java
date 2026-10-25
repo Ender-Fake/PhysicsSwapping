@@ -5,6 +5,7 @@ import com.enderium.physicsswapping.client.config.data.DualFloatRange;
 import com.enderium.physicsswapping.client.config.data.DualIntRange;
 import com.enderium.physicsswapping.client.config.data.Property;
 import com.enderium.physicsswapping.client.config.data.ref.BooleanRef;
+import com.enderium.physicsswapping.client.config.data.ref.FloatRef;
 import com.enderium.physicsswapping.client.render.AnimationData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,8 @@ public class PhysicsSwappingConfig {
         public static final String ANGLE_KEY = "angle";
         public static final String ITEM_SCALE_KEY = "item_scale";
         public static final String SQUASH_STRETCH_KEY = "squash_stretch";
+        public static final String SQUASH_STRETCH_X_KEY = "squash_stretch_x";
+        public static final String SQUASH_STRETCH_Y_KEY = "squash_stretch_y";
 
     }
 
@@ -40,6 +43,9 @@ public class PhysicsSwappingConfig {
         public static final DualFloatRange Y_OFFSET_LIMIT = new DualFloatRange(0f, 32f);
         public static final DualFloatRange ANGLE_LIMIT = new DualFloatRange(0f, 45f);
         public static final DualFloatRange ITEM_SCALE_LIMIT = new DualFloatRange(0.5f, 2f);
+        public static final DualFloatRange SQUASH_STRETCH_X_LIMIT = new DualFloatRange(0f, 1f);
+        public static final DualFloatRange SQUASH_STRETCH_Y_LIMIT = new DualFloatRange(0f, 1f);
+
     }
 
     public static class Defaults {
@@ -51,6 +57,8 @@ public class PhysicsSwappingConfig {
         public static final DualFloatRange ANGLE_VALUE = new DualFloatRange(10, 15);
         public static final DualFloatRange ITEM_SCALE_VALUE = new DualFloatRange(1.08f, 1.15f);
         public static final BooleanRef SQUASH_STRETCH_VALUE = new BooleanRef(true);
+        public static final FloatRef SQUASH_STRETCH_X_VALUE = new FloatRef(0.2f);
+        public static final FloatRef SQUASH_STRETCH_Y_VALUE = new FloatRef(0.2f);
 
         public static final AnimationData SWAP_DEFAULT = new AnimationData(
                 DURATION_VALUE,
@@ -58,7 +66,10 @@ public class PhysicsSwappingConfig {
                 Y_OFFSET_VALUE,
                 ANGLE_VALUE,
                 ITEM_SCALE_VALUE,
-                SQUASH_STRETCH_VALUE
+                SQUASH_STRETCH_VALUE,
+                SQUASH_STRETCH_X_VALUE,
+                SQUASH_STRETCH_Y_VALUE
+
         );
 
     }
@@ -74,6 +85,8 @@ public class PhysicsSwappingConfig {
         public static final DualFloatRange angle = new DualFloatRange(Defaults.ANGLE_VALUE);
         public static final DualFloatRange itemScale = new DualFloatRange(Defaults.ITEM_SCALE_VALUE);
         public static final BooleanRef squashStretch = new BooleanRef(Defaults.SQUASH_STRETCH_VALUE.value);
+        public static final FloatRef squashStretchX = new FloatRef(Defaults.SQUASH_STRETCH_X_VALUE);
+        public static final FloatRef squashStretchY = new FloatRef(Defaults.SQUASH_STRETCH_Y_VALUE);
 
         public static final AnimationData SWAP_DATA = new AnimationData(
                 duration,
@@ -81,7 +94,9 @@ public class PhysicsSwappingConfig {
                 yOffset,
                 angle,
                 itemScale,
-                squashStretch
+                squashStretch,
+                squashStretchX,
+                squashStretchY
         );
 
 
@@ -96,6 +111,8 @@ public class PhysicsSwappingConfig {
         public static final Property<DualFloatRange> ANGLE = Values.angle.createProperty(Keys.ANGLE_KEY, Defaults.ANGLE_VALUE);
         public static final Property<DualFloatRange> ITEM_SCALE = Values.itemScale.createProperty(Keys.ITEM_SCALE_KEY, Defaults.ITEM_SCALE_VALUE);
         public static final Property<BooleanRef> SQUASH_STRETCH = Values.squashStretch.createProperty(Keys.SQUASH_STRETCH_KEY, Defaults.SQUASH_STRETCH_VALUE);
+        public static final Property<FloatRef> SQUASH_STRETCH_X = Values.squashStretchX.createProperty(Keys.SQUASH_STRETCH_X_KEY, Defaults.SQUASH_STRETCH_X_VALUE);
+        public static final Property<FloatRef> SQUASH_STRETCH_Y = Values.squashStretchY.createProperty(Keys.SQUASH_STRETCH_Y_KEY, Defaults.SQUASH_STRETCH_Y_VALUE);
 
 
     }
@@ -116,6 +133,8 @@ public class PhysicsSwappingConfig {
             ConfigFields.ANGLE.save(properties);
             ConfigFields.ITEM_SCALE.save(properties);
             ConfigFields.SQUASH_STRETCH.save(properties);
+            ConfigFields.SQUASH_STRETCH_X.save(properties);
+            ConfigFields.SQUASH_STRETCH_Y.save(properties);
 
 
             properties.store(writer, null);
@@ -143,6 +162,8 @@ public class PhysicsSwappingConfig {
             ConfigFields.ANGLE.load(properties);
             ConfigFields.ITEM_SCALE.load(properties);
             ConfigFields.SQUASH_STRETCH.load(properties);
+            ConfigFields.SQUASH_STRETCH_X.load(properties);
+            ConfigFields.SQUASH_STRETCH_Y.load(properties);
 
         } catch (IOException e) {
             log.error("Error loading configuration", e);
