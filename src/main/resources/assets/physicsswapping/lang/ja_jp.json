@@ -13,6 +13,8 @@
   "text.physicsswapping.config_menu.swap_values.squash_stretch": "スカッシュ＆ストレッチ",
   "text.physicsswapping.config_menu.swap_values.squash_stretch.on": "オン",
   "text.physicsswapping.config_menu.swap_values.squash_stretch.off": "オフ",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.x": "変形 X",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.y": "変形 Y",
   "modmenu.summaryTranslation.physicsswapping": "インベントリ内でのアイテム移動時にバウンス物理を追加します。",
   "modmenu.descriptionTranslation.physicsswapping": "インベントリ内でのアイテム移動時にバウンス物理を追加します。"
 }

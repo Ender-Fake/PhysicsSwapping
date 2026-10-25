@@ -31,6 +31,8 @@ public interface ConfigText {
     Translate Y_OFFSET = SWAP_VALUES.resolve("y_offset");
     Translate ITEM_SCALE = SWAP_VALUES.resolve("item_scale");
     Translate SQUASH_STRETCH = SWAP_VALUES.resolve("squash_stretch");
+    Translate SQUASH_STRETCH_X = SQUASH_STRETCH.resolve("x");
+    Translate SQUASH_STRETCH_Y = SQUASH_STRETCH.resolve("y");
     Translate SQUASH_STRETCH_ON = SQUASH_STRETCH.resolve("on");
     Translate SQUASH_STRETCH_OFF = SQUASH_STRETCH.resolve("off");
 

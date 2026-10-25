@@ -13,6 +13,8 @@
   "text.physicsswapping.config_menu.swap_values.squash_stretch": "Squash & Stretch",
   "text.physicsswapping.config_menu.swap_values.squash_stretch.on": "Enabled",
   "text.physicsswapping.config_menu.swap_values.squash_stretch.off": "Disabled",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.x": "Deform X",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.y": "Deform Y",
   "modmenu.summaryTranslation.physicsswapping": "Bouncy jump physics when moving items in your inventory.",
   "modmenu.descriptionTranslation.physicsswapping": "Bouncy jump physics when moving items in your inventory."
 }

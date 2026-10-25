@@ -13,6 +13,8 @@
   "text.physicsswapping.config_menu.swap_values.squash_stretch": "Стиснення та розтягування",
   "text.physicsswapping.config_menu.swap_values.squash_stretch.on": "Увімкнено",
   "text.physicsswapping.config_menu.swap_values.squash_stretch.off": "Вимкнено",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.x": "Деформація X",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.y": "Деформація Y",
   "modmenu.summaryTranslation.physicsswapping": "Фізика стрибків при переміщенні предметів в інвентарі.",
   "modmenu.descriptionTranslation.physicsswapping": "Фізика стрибків при переміщенні предметів в інвентарі."
 }

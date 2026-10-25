@@ -13,6 +13,8 @@
   "text.physicsswapping.config_menu.swap_values.squash_stretch": "Achatar e esticar",
   "text.physicsswapping.config_menu.swap_values.squash_stretch.on": "Ativado",
   "text.physicsswapping.config_menu.swap_values.squash_stretch.off": "Desativado",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.x": "Deformação X",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.y": "Deformação Y",
   "modmenu.summaryTranslation.physicsswapping": "Física de salto ao mover itens no inventário.",
   "modmenu.descriptionTranslation.physicsswapping": "Física de salto ao mover itens no inventário."
 }

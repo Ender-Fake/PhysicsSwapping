@@ -13,6 +13,8 @@
   "text.physicsswapping.config_menu.swap_values.squash_stretch": "Stauchen & Strecken",
   "text.physicsswapping.config_menu.swap_values.squash_stretch.on": "Aktiviert",
   "text.physicsswapping.config_menu.swap_values.squash_stretch.off": "Deaktiviert",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.x": "Verformung X",
+  "text.physicsswapping.config_menu.swap_values.squash_stretch.y": "Verformung Y",
   "modmenu.summaryTranslation.physicsswapping": "Hüpfphysik beim Bewegen von Gegenständen im Inventar.",
   "modmenu.descriptionTranslation.physicsswapping": "Hüpfphysik beim Bewegen von Gegenständen im Inventar."
 }
