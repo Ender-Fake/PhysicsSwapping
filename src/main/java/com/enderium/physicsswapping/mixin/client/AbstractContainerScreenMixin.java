@@ -1,13 +1,17 @@
 package com.enderium.physicsswapping.mixin.client;
 
 //~ gui_graphics
+import com.enderium.physicsswapping.client.SavedInventory;
 import com.enderium.physicsswapping.client.render.GuiRenderProcessor;
 import com.enderium.physicsswapping.client.render.RenderContext;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.inventory.Slot;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -25,16 +29,14 @@ public class AbstractContainerScreenMixin {
     //? if >=1.21.11 {
     @Inject(method = /*~ if >=26.1 'renderSlot' -> 'extractSlot' {*/"extractSlot"/*~}*/, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/Slot;isFake()Z"))
     public void extractSlot(GuiGraphicsExtractor graphics, Slot slot, int mouseX, int mouseY, CallbackInfo ci) {
-        if ((Object) this instanceof CreativeModeInventoryScreen) return;
-        GuiRenderProcessor.extractItemInSlot(slot.index, slot.getItem());
+        physicsSwapping$extractSlotAnimation(slot);
 
     }
     //?} elif >=1.21.1 {
 
     /*@Inject(method = "renderSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/Slot;isFake()Z"))
     public void extractSlot(GuiGraphicsExtractor guiGraphics, Slot slot, CallbackInfo ci) {
-        if ((Object)this instanceof CreativeModeInventoryScreen)return;
-        GuiRenderProcessor.extractItemInSlot(slot.index, slot.getItem());
+        physicsSwapping$extractSlotAnimation(slot);
 
     }
 
@@ -42,8 +44,7 @@ public class AbstractContainerScreenMixin {
 
     /*@Inject(method = "renderSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;renderItem(Lnet/minecraft/world/item/ItemStack;III)V"))
     public void extractSlot(GuiGraphicsExtractor guiGraphics, Slot slot, CallbackInfo ci) {
-        if ((Object)this instanceof CreativeModeInventoryScreen)return;
-        GuiRenderProcessor.extractItemInSlot(slot.index, slot.getItem());
+        physicsSwapping$extractSlotAnimation(slot);
 
     }
 
@@ -84,8 +85,7 @@ public class AbstractContainerScreenMixin {
 
     /*@Inject(method = "renderSlotContents", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/Slot;isFake()Z"))
     public void extractSlot(GuiGraphicsExtractor graphics, ItemStack itemStack, Slot slot, String itemCount, CallbackInfo ci) {
-        if ((Object) this instanceof CreativeModeInventoryScreen) return;
-        GuiRenderProcessor.extractItemInSlot(slot.index, slot.getItem());
+        physicsSwapping$extractSlotAnimation(slot);
 
     }
 
@@ -107,6 +107,25 @@ public class AbstractContainerScreenMixin {
 
 *///?}
 
+
+    @Unique
+    private void physicsSwapping$extractSlotAnimation(Slot slot) {
+        if (slot.getItem().isEmpty())return;
+        if ((Object) this instanceof CreativeModeInventoryScreen cScreen){
+            if (cScreen.isInventoryOpen()){
+                GuiRenderProcessor.extractItemInSlot(slot.getContainerSlot(), slot.getItem());
+            }
+            else {
+                LocalPlayer player = Minecraft.getInstance().player;
+                if (slot.container!= player.getInventory())return;
+                int index = SavedInventory.findIndexPlayerInventory(slot);
+                if (index==-1)return;
+                GuiRenderProcessor.extractItemInSlot(index, slot.getItem());
+            }
+            return;
+        }
+        GuiRenderProcessor.extractItemInSlot(slot.index, slot.getItem());
+    }
 
 
 }

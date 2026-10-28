@@ -5,6 +5,9 @@ import com.enderium.physicsswapping.client.SwapUtils;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundContainerSetContentPacket;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+//? if >=1.21.11 {
+import net.minecraft.network.protocol.game.ClientboundSetCursorItemPacket;
+//?}
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,8 +26,18 @@ public class ClientPacketListenerMixin {
     public void initSlots(ClientboundContainerSetContentPacket packet, CallbackInfo ci) {
         //? if >=1.21.11 {
         SavedInventory.initInventory(packet.items());
-        //?} else
-        //SavedInventory.initInventory(packet.getItems());
+        SavedInventory.setCopyCarriedItem(packet.carriedItem());
+        //?} else {
+        /*SavedInventory.initInventory(packet.getItems());
+        SavedInventory.setCopyCarriedItem(packet.getCarriedItem());
+        *///?}
     }
+
+    //? if >=1.21.11 {
+    @Inject(method = "handleSetCursorItem", at = @At("RETURN"))
+    public void setCursorItem(ClientboundSetCursorItemPacket packet, CallbackInfo ci){
+        SavedInventory.setCopyCarriedItem(packet.contents());
+    }
+    //?}
 
 }

@@ -23,6 +23,14 @@ public class SwapUtils {
     private static long lastAction;
     private static ActionContext actionContext = ActionContext.NONE;
 
+    public static void startAction() {
+        lastAction = System.nanoTime();
+    }
+
+    public static void setActionContext(ActionContext context) {
+        actionContext = context;
+    }
+
     //? if >=1.21.11 {
     public static void processSlot(int containerId, int stateId, short slotNum, byte buttonNum, ContainerInput containerInput, Int2ObjectMap<HashedStack> changedSlots, HashedStack carriedItem) {
     //?} else
@@ -34,7 +42,11 @@ public class SwapUtils {
         if (containerInput == ContainerInput.QUICK_MOVE) {
             setActionContext(SavedInventory.checkActionInventory(slotNum) ? ActionContext.CLICK_FROM : ActionContext.CLICK_TO);
         }
+        SavedInventory.setCopyCarriedItem(SavedInventory.getInventoryCarriedItem());
         IntFunction<ItemStack> inventory = SavedInventory.getterInventory();
+
+        if (containerInput==ContainerInput.QUICK_CRAFT&&changedSlots.size()==1)return;
+
         changedSlots.forEach((i, stack) -> {
             if (i == slotNum && containerInput == ContainerInput.PICKUP) {
                 SavedInventory.setItem(i, ItemStack.EMPTY);
@@ -75,15 +87,56 @@ public class SwapUtils {
             else if (!SavedInventory.checkActionInventory(slot)) return;
         }
         if (time > 100_000_000) return;
-        GuiRenderProcessor.addSlot(slot, SwapSource.SET_CLOT);
+        GuiRenderProcessor.addSlot(slot, SwapSource.SET_SLOT);
     }
 
-    public static void startAction() {
-        lastAction = System.nanoTime();
+    private static int lastCreativeSlot=-1;
+    private static long lastCreativeTime=-1;
+    private static boolean creativeCheckEquals=false;
+
+    public static void onSetCreativeSlot(int slot, ItemStack stack) {
+        if (slot < 0) return;
+        if (creativeCheckEquals&&SavedInventory.checkItemAndCount(slot, stack))return;
+        long time = System.nanoTime();
+        long timeSpan=time-lastCreativeTime;
+        int lastSlot=lastCreativeSlot;
+
+        if (timeSpan>10_000_000) {
+            lastSlot=-1;
+        }
+
+        lastCreativeSlot=slot;
+        lastCreativeTime=time;
+
+
+        if (SavedInventory.checkItemAndCount(slot, stack)) {
+            if (stack.isEmpty()) SavedInventory.setItem(slot, ItemStack.EMPTY);
+            else SavedInventory.setCopyItem(slot, stack);
+            return;
+        }
+        if (stack.isEmpty()) SavedInventory.setItem(slot, ItemStack.EMPTY);
+        else SavedInventory.setCopyItem(slot, stack);
+
+        if (timeSpan>10_000_000) {
+            return;
+        }
+
+        if (lastSlot!=-1) GuiRenderProcessor.addSlot(lastSlot, SwapSource.PACKET_CREATIVE);
+        GuiRenderProcessor.addSlot(slot, SwapSource.PACKET_CREATIVE);
+        lastCreativeSlot=-1;
+
     }
 
-    public static void setActionContext(ActionContext context) {
-        actionContext = context;
+    public static void onSetLastSwapCreativeSlot() {
+        if(lastCreativeSlot!=-1) GuiRenderProcessor.addSlot(lastCreativeSlot, SwapSource.PACKET_CREATIVE);
+        lastCreativeSlot=-1;
     }
 
+    public static void resetSwapCreativeSlot() {
+        lastCreativeSlot=-1;
+    }
+
+    public static void creativeCheckEquals(boolean creativeCheckEquals) {
+        SwapUtils.creativeCheckEquals = creativeCheckEquals;
+    }
 }

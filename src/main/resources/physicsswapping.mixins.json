@@ -10,7 +10,8 @@
     "client.AbstractContainerScreenMixin",
     "client.GuiGraphicsExtractorMixin",
     "client.MultiPlayerGameModeMixin",
-    "client.ClientPacketListenerMixin"
+    "client.ClientPacketListenerMixin",
+    "client.CreativeModeInventoryScreenMixin"
 
   ],
   "injectors": {

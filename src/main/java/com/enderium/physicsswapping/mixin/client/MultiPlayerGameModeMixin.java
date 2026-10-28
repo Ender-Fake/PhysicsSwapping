@@ -7,6 +7,7 @@ import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerGamePacketListener;
 import net.minecraft.network.protocol.game.ServerboundContainerClickPacket;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -88,5 +89,12 @@ public class MultiPlayerGameModeMixin {
     }
 
     *///?}
+
+    @Inject(method = "handleCreativeModeItemAdd", at = @At("HEAD"))
+    public void injectCreativeAction(ItemStack clicked, int slot, CallbackInfo ci){
+        onSetCreativeSlot(slot,clicked);
+
+    }
+
 
 }
