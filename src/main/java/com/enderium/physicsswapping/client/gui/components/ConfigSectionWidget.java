@@ -424,6 +424,7 @@ public class ConfigSectionWidget extends AbstractWidget implements ContainerEven
     }
 
     protected Optional<GuiEventListener> getValueChildAt(final double x, final double y) {
+        if (!tabContent.isOver(x,y))return Optional.empty();
         for (GuiEventListener child : this.values) {
             if (child.isMouseOver(x, y)) {
                 return Optional.of(child);
