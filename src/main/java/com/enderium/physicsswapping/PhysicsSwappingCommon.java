@@ -8,7 +8,7 @@ public class PhysicsSwappingCommon {
 
     public static final String MODID = "physicsswapping";
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
-    public static final String VERSION = /*$ mod_version*/ "1.3.0";
+    public static final String VERSION = /*$ mod_version*/ "1.4.0";
     public static final String MINECRAFT = /*$ minecraft*/ "26.3";
 
     /**
